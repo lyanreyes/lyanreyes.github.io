@@ -312,7 +312,7 @@
     function speak(html) {
       if (!voiceOn || !window.speechSynthesis) return;
       const d = el("div"); d.innerHTML = html;
-      const text = d.textContent.replace(/[\u{1F300}-\u{1FAFF}☀-➿️]/gu, "").replace(/\*/g, "");
+      const text = d.textContent.replace(/[\u{1F300}-\u{1FAFF}☀-➿️]/gu, "").replace(/\*/g, "").replace(/\bLyan\b/g, "Lian");
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text); u.pitch = 0.05; u.rate = 0.92; u.volume = 0.9;
       const vs = speechSynthesis.getVoices();
