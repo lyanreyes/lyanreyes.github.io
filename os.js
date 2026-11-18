@@ -266,7 +266,7 @@
 
   /* ---------- Rocky: the floating astronaut you can chat with ---------- */
   apps.astro = { title: "Rocky · Mission Chat", w: 440, h: 600, flush: true, render: () =>
-    '<div class="chat"><div class="chat-head"><i></i><span style="flex:1">ROCKY-01 ONLINE · ask about Lyan, his projects, or space</span><button class="voice" aria-label="Toggle Rocky voice"></button></div><div class="chat-log" aria-live="polite"></div>' +
+    '<div class="chat"><div class="chat-head"><i></i><span style="flex:1">ROCKY-01 ONLINE · ask about Lyan, his projects, or space</span><select class="mood" aria-label="Rocky mood"></select><button class="voice" aria-label="Toggle Rocky voice"></button></div><div class="chat-log" aria-live="polite"></div>' +
     '<div class="chat-chips">' + ["Who is Lyan?", "Show projects", "What are his skills?", "How do I contact him?", "Tell me a space fact", "Play a game"].map(q => `<button>${q}</button>`).join("") + '</div>' +
     '<form class="chat-in"><input placeholder="Type a message…" aria-label="Message Rocky" autocomplete="off"><button type="submit">Send</button></form></div>',
     mount: mountRocky };
@@ -316,17 +316,45 @@
     const setV = () => { vbtn.textContent = voiceOn ? "🔊" : "🔇"; vbtn.title = voiceOn ? "Mute Rocky" : "Unmute Rocky"; };
     setV();
     vbtn.onclick = () => { voiceOn = !voiceOn; store.set("rockyVoice", voiceOn); setV(); if (!voiceOn && window.speechSynthesis) speechSynthesis.cancel(); };
-    const pre = ["BEEP BOOP.", "*WHIRR CLICK*", "PROCESSING… DONE.", "BZZT.", "QUERY RECEIVED."], post = ["BEEP.", "END OF TRANSMISSION.", "BOOP.", "*CLICK*"];
-    const robo = html => `<span class="robo">${pick(pre)}</span> ${html} <span class="robo">${pick(post)}</span>`;
+    /* moods: each one changes the voice, the chirp, the little sounds he types, and how he moves */
+    const C = 261.63, M = r => C * Math.pow(2, r / 12);
+    const MOODS = {
+      normal:  { label: "🙂 Normal",  pitch: .85, rate: .92, notes: [[M(12), M(16)], [M(7), M(11)], [M(16), M(19)]], gap: .11, wave: "triangle", shuffle: true,
+                 pre: ["BEEP BOOP.", "*WHIRR CLICK*", "PROCESSING… DONE.", "QUERY RECEIVED."], post: ["BEEP.", "END OF TRANSMISSION.", "BOOP."], move: "waving", say: "Normal mode. Ready to help!" },
+      happy:   { label: "😄 Happy",   pitch: 1.15, rate: 1.03, notes: [[M(12)], [M(16)], [M(19)], [M(24)]], gap: .08, wave: "triangle",
+                 pre: ["*happy beeps*", "YAY!", "*cheerful whirr*"], post: ["😄", "Hehe!", "BEEP! 💛"], move: "hopping", say: "I'm so happy! Let's go!" },
+      funny:   { label: "🤪 Funny",   pitch: 1.7, rate: 1.18, notes: [[M(24)], [M(19)], [M(26)], [M(14)], [M(28)]], gap: .06, wave: "square", shuffle: true,
+                 pre: ["*giggles*", "*BOING*", "HONK HONK."], post: ["*snort*", "😂", "*wiggles legs*"], move: "spinning", say: "Hee hee! Funny mode activated!" },
+      sad:     { label: "😢 Sad",     pitch: .55, rate: .78, notes: [[M(7), M(10)], [M(5), M(8)], [M(3), M(7)], [M(0), M(3)]], gap: .22, wave: "sine",
+                 pre: ["*sigh*…", "*sad beep*…", "*sniff*"], post: ["…", "*quiet boop*", "😢"], move: "looking", say: "Oh… I'm feeling a little sad today…" },
+      excited: { label: "🤩 Excited", pitch: 1.3, rate: 1.32, notes: [[M(12)], [M(16)], [M(19)], [M(24)], [M(28)], [M(31)]], gap: .05, wave: "triangle",
+                 pre: ["WOW WOW WOW!", "*ZOOM*", "OH OH OH!"], post: ["!!!", "SO COOL!", "🚀"], move: "dance", say: "Wow wow wow! I'm super excited!" },
+      sleepy:  { label: "😴 Sleepy",  pitch: .7, rate: .66, notes: [[M(7)], [M(4)], [M(0)]], gap: .3, wave: "sine",
+                 pre: ["*yawn*…", "*zzz*… huh?", "*slow whirr*…"], post: ["…zzz", "*yawn*", "😴"], move: "looking", say: "Yawn… I'm so sleepy…" },
+      robot:   { label: "🤖 Robot",   pitch: .1, rate: .88, notes: [[M(0)], [M(0)], [M(12)]], gap: .1, wave: "square",
+                 pre: ["BEEP BOOP.", "PROCESSING… DONE.", "BZZT."], post: ["END OF TRANSMISSION.", "BEEP.", "*CLICK*"], move: "waving", say: "Robot mode. Beep boop. Online." }
+    };
+    let mood = MOODS[store.get("rockyMood", "normal")] ? store.get("rockyMood", "normal") : "normal";
+    const robo = html => { const m = MOODS[mood]; return `<span class="robo">${pick(m.pre)}</span> ${html} <span class="robo">${pick(m.post)}</span>`; };
+    const msel = $(".mood", body);
+    msel.innerHTML = Object.entries(MOODS).map(([k, m]) => `<option value="${k}">${m.label}</option>`).join("");
+    msel.value = mood; $("#astro").dataset.mood = mood;
+    msel.onchange = () => {
+      mood = msel.value; store.set("rockyMood", mood); $("#astro").dataset.mood = mood;
+      $("#astro").dispatchEvent(new CustomEvent("rockymood", { detail: MOODS[mood].move }));
+      const r = robo(MOODS[mood].say); add(r, "bot"); speak(r);
+    };
     let actx = null;
     function chirp() {
       try {
         actx = actx || new (window.AudioContext || window.webkitAudioContext)();
-        const notes = [[523.25, 659.25], [392, 493.88], [659.25, 783.99]], t0 = actx.currentTime;
-        notes.sort(() => Math.random() - .5).forEach((pair, i) => pair.forEach(f => {
-          const o = actx.createOscillator(), g = actx.createGain(); o.type = "triangle"; o.frequency.value = f;
-          const t = t0 + i * .11; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.06, t + .015); g.gain.exponentialRampToValueAtTime(.0001, t + .1);
-          o.connect(g).connect(actx.destination); o.start(t); o.stop(t + .11);
+        const m = MOODS[mood], notes = m.notes.slice(), t0 = actx.currentTime, len = m.gap * .95;
+        if (m.shuffle) notes.sort(() => Math.random() - .5);
+        notes.forEach((pair, i) => pair.forEach(f => {
+          const o = actx.createOscillator(), g = actx.createGain(); o.type = m.wave; o.frequency.value = f;
+          const t = t0 + i * m.gap; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(m.wave === "square" ? .03 : .06, t + .015); g.gain.exponentialRampToValueAtTime(.0001, t + len);
+          if (mood === "sad" || mood === "sleepy") o.frequency.exponentialRampToValueAtTime(f * .94, t + len);
+          o.connect(g).connect(actx.destination); o.start(t); o.stop(t + len + .01);
         }));
       } catch (e) {}
     }
@@ -336,7 +364,7 @@
       const text = d.textContent.replace(/[\u{1F300}-\u{1FAFF}☀-➿️]/gu, "").replace(/\*/g, "").replace(/\bLyan\b/g, "Lee-yan");
       speechSynthesis.cancel();
       /* clear male voice; a short musical chirp plays first for an alien feel */
-      const u = new SpeechSynthesisUtterance(text); u.pitch = 0.85; u.rate = 0.92; u.volume = 1;
+      const u = new SpeechSynthesisUtterance(text); u.pitch = MOODS[mood].pitch; u.rate = MOODS[mood].rate; u.volume = 1;
       const vs = speechSynthesis.getVoices(), en = vs.filter(x => /^en/i.test(x.lang));
       const pref = [/(guy|andrew|brian|christopher|eric|davis|roger|steffan).*natural|natural.*(guy|andrew|brian|christopher|eric|davis|roger|steffan)/i,
         /google uk english male/i, /\b(guy|andrew|brian|christopher|eric|davis|roger|steffan|ryan|thomas)\b/i,
@@ -344,7 +372,7 @@
       let v = null; for (const re of pref) { v = en.find(x => re.test(x.name)); if (v) break; }
       v = v || en.find(x => !/female|zira|aria|jenny|samantha|hazel|susan|libby|sonia|emma|ava|michelle/i.test(x.name)) || en[0];
       if (v) u.voice = v;
-      chirp(); setTimeout(() => speechSynthesis.speak(u), 380);
+      chirp(); setTimeout(() => speechSynthesis.speak(u), Math.min(900, MOODS[mood].notes.length * MOODS[mood].gap * 1000 + 120));
     }
     function send(q) {
       if (!q.trim()) return; add(esc(q), "me");
@@ -389,6 +417,13 @@
     rk.addEventListener("click", e => e.stopPropagation());
     root.addEventListener("click", e => { if (!e.target.closest("#rk")) openApp("astro"); });
     root.addEventListener("keydown", e => { if (e.key === "t") trick(); });
+    root.addEventListener("rockymood", e => {
+      const t = e.detail, now = performance.now();
+      ["hopping", "waving", "spinning", "looking", "walking"].forEach(c => setCls(c, false)); void root.offsetWidth;
+      if (t === "dance") { setCls("walking", true); setCls("hopping", true); setTimeout(() => { setCls("walking", false); setCls("hopping", false); }, 1200); busyUntil = now + 1300; }
+      else { setCls(t, true); const d = t === "waving" ? 2500 : t === "looking" ? 1600 : 750; setTimeout(() => setCls(t, false), d); busyUntil = now + d; }
+      nextAt = busyUntil + 900;
+    });
 
     function frame(now) {
       if (!held) {
@@ -399,7 +434,7 @@
           if (Math.abs(y) < .4 && Math.abs(vy) < .4) { y = 0; vy = 0; }
         } else if (now > busyUntil) {
           y = 0;
-          if (Math.abs(target - x) > .6) { const dir = Math.sign(target - x); x += dir * .55; setCls("walking", true); setCls("face-left", dir < 0); }
+          if (Math.abs(target - x) > .6) { const dir = Math.sign(target - x), md = root.dataset.mood; x += dir * (md === "excited" ? 1.3 : md === "funny" || md === "happy" ? .8 : md === "sad" || md === "sleepy" ? .22 : .55); setCls("walking", true); setCls("face-left", dir < 0); }
           else { setCls("walking", false); if (now > nextAt) {
             const r = Math.random();
             if (r < .55) target = MIN + Math.random() * (MAX - MIN);

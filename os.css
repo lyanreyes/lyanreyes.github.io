@@ -310,3 +310,12 @@ ul.b b{color:var(--ink);font-weight:600}
 .viewswitch .vs.on{background:var(--accent);color:var(--accent-ink)}
 .viewswitch a.vs:hover{background:rgba(255,255,255,.1);color:#fff}
 @media (max-width:760px){.viewswitch .vs{padding:0 10px;height:34px}.viewswitch{margin-right:4px}}
+
+/* Rocky mood picker + mood-based motion */
+.chat-head .mood{background:var(--chip);color:var(--chip-ink);border:1px solid var(--line);border-radius:999px;padding:4px 8px;font:500 12px var(--sans);cursor:pointer;outline:none}
+.chat-head .mood:focus{border-color:var(--accent)}
+#astro[data-mood="sad"] .rk-wob,#astro[data-mood="sleepy"] .rk-wob{animation-duration:5.5s}
+#astro[data-mood="sad"] .rk-wob{transform:translateY(2px) rotate(-3deg)}
+#astro[data-mood="sleepy"] .astro-svg{animation-duration:20s}
+#astro[data-mood="excited"] .rk-wob{animation-duration:.9s}
+#astro[data-mood="funny"] .rk-wob{animation-duration:1.4s}
