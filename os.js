@@ -266,8 +266,8 @@
 
   /* ---------- Rocky: the floating astronaut you can chat with ---------- */
   apps.astro = { title: "Rocky · Mission Chat", w: 440, h: 600, flush: true, render: () =>
-    '<div class="chat"><div class="chat-head"><i></i><span style="flex:1">ROCKY-01 ONLINE · ask about Lyan, his projects, or space</span><select class="mood" aria-label="Rocky mood"></select><button class="voice" aria-label="Toggle Rocky voice"></button></div><div class="chat-log" aria-live="polite"></div>' +
-    '<div class="chat-chips">' + ["Who is Lyan?", "Show projects", "What are his skills?", "How do I contact him?", "Tell me a space fact", "Play a game"].map(q => `<button>${q}</button>`).join("") + '</div>' +
+    '<div class="chat"><div class="chat-head"><i></i><span class="ch-title"><b>Rocky</b><small>online · ask about Lyan</small></span><select class="mood" aria-label="Rocky mood"></select><button class="voice" aria-label="Toggle Rocky voice"></button></div><div class="chat-log" aria-live="polite"></div>' +
+    '<div class="chat-chips">' + ["Who is Lyan?", "Show projects", "His skills", "Contact him", "Space fact", "Play a game"].map(q => `<button>${q}</button>`).join("") + '</div>' +
     '<form class="chat-in"><input placeholder="Type a message…" aria-label="Message Rocky" autocomplete="off"><button type="submit">Send</button></form></div>',
     mount: mountRocky };
   labels.astro = "Ask Rocky";

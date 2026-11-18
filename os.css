@@ -319,3 +319,26 @@ ul.b b{color:var(--ink);font-weight:600}
 #astro[data-mood="sleepy"] .astro-svg{animation-duration:20s}
 #astro[data-mood="excited"] .rk-wob{animation-duration:.9s}
 #astro[data-mood="funny"] .rk-wob{animation-duration:1.4s}
+
+/* even, tidy chat layout */
+.chat-head{display:flex;align-items:center;gap:10px;padding:10px 12px;min-height:52px}
+.chat-head i{flex:none}
+.ch-title{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
+.ch-title b{font:700 14px var(--display);color:var(--ink)}
+.ch-title small{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-head .mood,.chat-head .voice{height:32px;flex:none}
+.chat-head .mood{padding:0 10px}
+.chat-head .voice{width:32px;display:grid;place-items:center;border:1px solid var(--line);background:var(--chip)}
+.chat-log{padding:14px 14px 10px;gap:10px}
+.msg{max-width:82%;padding:10px 14px;border-radius:16px;font:400 14px/1.5 var(--sans)}
+.msg.bot{font:400 14px/1.5 var(--sans);border-bottom-left-radius:5px}
+.msg.me{border-bottom-right-radius:5px}
+.msg.bot .robo{font:500 11.5px var(--mono);display:block;letter-spacing:.06em;opacity:.9}
+.msg.bot .robo:first-child{margin-bottom:4px}
+.msg.bot .robo:last-child{margin-top:4px}
+.chat-chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:8px 12px;overflow:visible;border-top:1px solid var(--line)}
+.chat-chips button{width:100%;height:32px;padding:0 8px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.chat-in{padding:10px 12px;gap:8px;align-items:center}
+.chat-in input{height:40px;padding:0 16px}
+.chat-in button{height:40px;padding:0 18px;flex:none}
+@media (max-width:420px){.chat-chips{grid-template-columns:repeat(2,minmax(0,1fr))}}
