@@ -54,7 +54,7 @@
       bullets: ["<b>Built:</b> the Android app, a Flask website, a clickable prototype, and a Figma design system with 17 screens", "<b>Highlights:</b> PostGIS nearby search (1/5/10 km), realtime chat and tracking, over-the-air updates"],
       stack: ["React Native", "Expo", "TypeScript", "Supabase", "PostgreSQL + PostGIS", "Leaflet / OSM", "Flask", "Figma"],
       demo: { url: "demos/sidequest/index.html", label: "Try the prototype", w: 440, h: 820 },
-      links: [["Download APK", "https://github.com/lyanreyes/sidequest/releases/latest/download/SideQuest.apk"], ["Source code", "https://github.com/lyanreyes/sidequest"]],
+      links: [["Download APK", "https://github.com/lyanreyes/sidequest/releases/latest/download/SideQuest.apk"], ["Source code", "https://github.com/lyanreyes/sidequest"], ["Design files", "https://github.com/lyanreyes/sidequest-design"]],
       extra: [["Watch promo video", "video"]]
     },
     scandex: {
@@ -64,7 +64,7 @@
       bullets: ["<b>How:</b> six image fingerprints ranked by a learned logistic-regression model, plus an OCR check of the card number", "<b>Results:</b> 71% top-1, 80% top-5, and 97% precision on matches it auto-accepts. Written up as an IMRaD paper"],
       stack: ["Python", "JavaScript", "Computer vision", "Logistic regression", "Tesseract.js", "PWA"],
       demo: { url: "demos/scandex/index.html", label: "Open the live app", w: 1000, h: 700, camera: true },
-      links: []
+      links: [["Source code", "https://github.com/lyanreyes/scandex"]]
     },
     drift: {
       name: "Drift District", full: "Drift District", tag: "3D game · Multiplayer · 2026", icon: "img/drift.png",
@@ -82,7 +82,7 @@
       bullets: [],
       stack: ["JavaScript", "HTML Canvas", "Firebase Realtime DB"],
       demo: { url: "demos/optics-lab/index.html", label: "Open Optics Lab", w: 1050, h: 700 },
-      links: []
+      links: [["Source code", "https://github.com/lyanreyes/optics-lab"]]
     }
   };
 
