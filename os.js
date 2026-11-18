@@ -318,19 +318,33 @@
     vbtn.onclick = () => { voiceOn = !voiceOn; store.set("rockyVoice", voiceOn); setV(); if (!voiceOn && window.speechSynthesis) speechSynthesis.cancel(); };
     const pre = ["BEEP BOOP.", "*WHIRR CLICK*", "PROCESSING… DONE.", "BZZT.", "QUERY RECEIVED."], post = ["BEEP.", "END OF TRANSMISSION.", "BOOP.", "*CLICK*"];
     const robo = html => `<span class="robo">${pick(pre)}</span> ${html} <span class="robo">${pick(post)}</span>`;
+    let actx = null;
+    function chirp() {
+      try {
+        actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+        const notes = [[523.25, 659.25], [392, 493.88], [659.25, 783.99]], t0 = actx.currentTime;
+        notes.sort(() => Math.random() - .5).forEach((pair, i) => pair.forEach(f => {
+          const o = actx.createOscillator(), g = actx.createGain(); o.type = "triangle"; o.frequency.value = f;
+          const t = t0 + i * .11; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.06, t + .015); g.gain.exponentialRampToValueAtTime(.0001, t + .1);
+          o.connect(g).connect(actx.destination); o.start(t); o.stop(t + .11);
+        }));
+      } catch (e) {}
+    }
     function speak(html) {
       if (!voiceOn || !window.speechSynthesis) return;
       const d = el("div"); d.innerHTML = html; d.querySelectorAll(".robo").forEach(n => n.remove());
       const text = d.textContent.replace(/[\u{1F300}-\u{1FAFF}☀-➿️]/gu, "").replace(/\*/g, "").replace(/\bLyan\b/g, "Lee-yan");
       speechSynthesis.cancel();
-      /* human-sounding voice, pitched a little low and steady so it still feels like a friendly robot */
-      const u = new SpeechSynthesisUtterance(text); u.pitch = 1.25; u.rate = 0.9; u.volume = 1;
+      /* clear male voice; a short musical chirp plays first for an alien feel */
+      const u = new SpeechSynthesisUtterance(text); u.pitch = 0.85; u.rate = 0.92; u.volume = 1;
       const vs = speechSynthesis.getVoices(), en = vs.filter(x => /^en/i.test(x.lang));
-      const pref = [/natural/i, /google us english/i, /guy|andrew|brian|christopher|eric/i, /aria|jenny|samantha|google uk english/i, /david|daniel|alex/i];
+      const pref = [/(guy|andrew|brian|christopher|eric|davis|roger|steffan).*natural|natural.*(guy|andrew|brian|christopher|eric|davis|roger|steffan)/i,
+        /google uk english male/i, /\b(guy|andrew|brian|christopher|eric|davis|roger|steffan|ryan|thomas)\b/i,
+        /\b(david|mark|daniel|alex|fred|tom|aaron|arthur|rishi|oliver|george)\b/i, /\bmale\b/i];
       let v = null; for (const re of pref) { v = en.find(x => re.test(x.name)); if (v) break; }
-      v = v || en[0];
+      v = v || en.find(x => !/female|zira|aria|jenny|samantha|hazel|susan|libby|sonia|emma|ava|michelle/i.test(x.name)) || en[0];
       if (v) u.voice = v;
-      speechSynthesis.speak(u);
+      chirp(); setTimeout(() => speechSynthesis.speak(u), 380);
     }
     function send(q) {
       if (!q.trim()) return; add(esc(q), "me");
