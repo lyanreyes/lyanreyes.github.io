@@ -37,10 +37,21 @@
       <radialGradient id="eye" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#e9fbff"/><stop offset=".45" stop-color="#38d6ff"/><stop offset="1" stop-color="#1f5eff"/></radialGradient>
       <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9fbff"/><stop offset=".4" stop-color="#38d6ff"/><stop offset="1" stop-color="#1f5eff" stop-opacity="0"/></linearGradient>
       <linearGradient id="gem" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bff0ff"/><stop offset="1" stop-color="#3a7bff"/></linearGradient>
+      <filter id="rockTex" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="4" seed="7" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.25  0 0 0 0 0.2  0 0 0 0 0.16  0 0 0 1.4 -0.55" result="spots"/>
+        <feComposite in="spots" in2="SourceAlpha" operator="in" result="spotsIn"/>
+        <feTurbulence type="turbulence" baseFrequency="0.035 0.06" numOctaves="2" seed="3" result="t"/>
+        <feDiffuseLighting in="t" surfaceScale="3.2" lighting-color="#fff" result="lit"><feDistantLight azimuth="225" elevation="48"/></feDiffuseLighting>
+        <feComposite in="lit" in2="SourceAlpha" operator="in" result="litIn"/>
+        <feBlend in="SourceGraphic" in2="litIn" mode="multiply" result="shaded"/>
+        <feComposite in="spotsIn" in2="shaded" operator="over"/>
+      </filter>
     </defs>
     <circle cx="70" cy="82" r="70" fill="url(#glow)"/>
     <!-- jet boosters -->
     <g class="flames"><path d="M29 122 q4 18 0 28 q-4 -10 0 -28Z" fill="url(#flame)"/><path d="M55 131 q4 22 0 34 q-4 -12 0 -34Z" fill="url(#flame)"/><path d="M87 131 q4 22 0 34 q-4 -12 0 -34Z" fill="url(#flame)"/><path d="M111 122 q4 18 0 28 q-4 -10 0 -28Z" fill="url(#flame)"/></g>
+    <g filter="url(#rockTex)">
     <!-- four stubby feet: two in back (darker), two in front -->
     <path d="M30 104 l-8 12 q-2 5 3 6 h9 q5 0 5 -5 l1 -10Z" fill="#5b4f44"/>
     <path d="M106 104 l8 12 q2 5 -3 6 h-9 q-5 0 -5 -5 l-1 -10Z" fill="#5b4f44"/>
@@ -56,6 +67,7 @@
     <path d="M52 50 l8 8 l-3 9 M92 60 l-7 6 l4 10 M60 98 l9 -4 l6 6" stroke="#4a4038" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/>
     <g fill="#4a4038" opacity=".45"><circle cx="40" cy="80" r="2"/><circle cx="98" cy="92" r="2.4"/><circle cx="78" cy="106" r="1.6"/><circle cx="46" cy="62" r="1.4"/><circle cx="96" cy="50" r="1.5"/></g>
     <path d="M36 92 q8 -6 16 0 q-8 4 -16 0Z" fill="#5fa86a" opacity=".55"/>
+    </g>
     <!-- crystal crown -->
     <path d="M60 37 l4 -14 l5 13Z" fill="url(#gem)"/><path d="M69 35 l6 -18 l5 18Z" fill="url(#gem)"/><path d="M80 37 l5 -11 l3 12Z" fill="url(#gem)"/>
     <!-- face -->

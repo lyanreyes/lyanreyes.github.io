@@ -258,7 +258,7 @@
 
   /* ---------- Rocky: the floating astronaut you can chat with ---------- */
   apps.astro = { title: "Rocky · Mission Chat", w: 440, h: 600, flush: true, render: () =>
-    '<div class="chat"><div class="chat-head"><i></i>Rocky is online · ask about Lyan, his projects, or space</div><div class="chat-log" aria-live="polite"></div>' +
+    '<div class="chat"><div class="chat-head"><i></i><span style="flex:1">ROCKY-01 ONLINE · ask about Lyan, his projects, or space</span><button class="voice" aria-label="Toggle Rocky voice"></button></div><div class="chat-log" aria-live="polite"></div>' +
     '<div class="chat-chips">' + ["Who is Lyan?", "Show projects", "What are his skills?", "How do I contact him?", "Tell me a space fact", "Play a game"].map(q => `<button>${q}</button>`).join("") + '</div>' +
     '<form class="chat-in"><input placeholder="Type a message…" aria-label="Message Rocky" autocomplete="off"><button type="submit">Send</button></form></div>',
     mount: mountRocky };
@@ -301,12 +301,31 @@
       for (const [re, fn] of rules) if (re.test(s)) return fn();
       return "Hmm, my antenna didn't catch that 📡. Try asking about Lyan, his projects (SideQuest, ScanDex, Drift District, Optics Lab), his skills, his resume, or how to contact him.";
     }
+    /* robot voice: robot-style text + spoken reply (Web Speech API) */
+    let voiceOn = store.get("rockyVoice", true);
+    const vbtn = $(".voice", body);
+    const setV = () => { vbtn.textContent = voiceOn ? "🔊" : "🔇"; vbtn.title = voiceOn ? "Mute Rocky" : "Unmute Rocky"; };
+    setV();
+    vbtn.onclick = () => { voiceOn = !voiceOn; store.set("rockyVoice", voiceOn); setV(); if (!voiceOn && window.speechSynthesis) speechSynthesis.cancel(); };
+    const pre = ["BEEP BOOP.", "*WHIRR CLICK*", "PROCESSING… DONE.", "BZZT.", "QUERY RECEIVED."], post = ["BEEP.", "END OF TRANSMISSION.", "BOOP.", "*CLICK*"];
+    const robo = html => `<span class="robo">${pick(pre)}</span> ${html} <span class="robo">${pick(post)}</span>`;
+    function speak(html) {
+      if (!voiceOn || !window.speechSynthesis) return;
+      const d = el("div"); d.innerHTML = html;
+      const text = d.textContent.replace(/[\u{1F300}-\u{1FAFF}☀-➿️]/gu, "").replace(/\*/g, "");
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text); u.pitch = 0.05; u.rate = 0.92; u.volume = 0.9;
+      const vs = speechSynthesis.getVoices();
+      const v = vs.find(x => /^en/i.test(x.lang) && /david|daniel|alex|fred|male/i.test(x.name)) || vs.find(x => /^en/i.test(x.lang));
+      if (v) u.voice = v;
+      speechSynthesis.speak(u);
+    }
     function send(q) {
       if (!q.trim()) return; add(esc(q), "me");
-      const t = add("Rocky is typing…", "bot typing");
-      setTimeout(() => { t.remove(); add(reply(q), "bot"); }, 450 + Math.random() * 450);
+      const t = add('ROCKY IS COMPUTING<span class="dots">...</span>', "bot typing");
+      setTimeout(() => { t.remove(); const r = robo(reply(q)); add(r, "bot"); speak(r); }, 500 + Math.random() * 450);
     }
-    add("Hi! I'm <b>Rocky</b> 🪨, a space rock and Lyan's mission buddy. Ask me anything about Lyan and his work, or tap a suggestion below.", "bot");
+    add(robo("GREETINGS, HUMAN. I am <b>Rocky</b> 🪨, space rock unit and Lyan's mission buddy. Ask me anything about Lyan and his work, or tap a suggestion below."), "bot");
     form.addEventListener("submit", e => { e.preventDefault(); const v = inp.value; inp.value = ""; send(v); });
     $(".chat-chips", body).addEventListener("click", e => { const b = e.target.closest("button"); if (b) send(b.textContent); });
     if (!isMobile()) setTimeout(() => inp.focus(), 60);

@@ -252,3 +252,8 @@ ul.b b{color:var(--ink);font-weight:600}
   h2.h{font-size:23px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.msg.bot{font-family:var(--mono);font-size:13px}
+.msg.bot .robo{color:var(--accent-2);font-weight:500;letter-spacing:.06em}
+.msg.typing .dots{animation:blink 1s steps(2) infinite}
+.chat-head .voice{font-size:16px;width:32px;height:28px;border-radius:7px}
+.chat-head .voice:hover{background:rgba(255,255,255,.08)}
