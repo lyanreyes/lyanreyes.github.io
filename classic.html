@@ -45,7 +45,7 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .links{display:flex;gap:22px;align-items:center;font-size:14.5px}
 .links a{text-decoration:none;color:var(--muted)}
 .links a:hover{color:var(--ink)}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14.5px;text-decoration:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);transition:transform .15s,border-color .15s}
+.btn{cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14.5px;text-decoration:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);transition:transform .15s,border-color .15s}
 .btn:hover{transform:translateY(-1px);border-color:var(--accent)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:0 8px 20px -10px var(--glow)}
 .btn.primary:hover{border-color:var(--accent-2)}
@@ -263,9 +263,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
   <section id="contact" class="contact">
     <h2>Let's work together.</h2>
-    <p>Open to internships, freelance projects and AI-training work.</p>
+    <p>Open to internships, freelance projects and AI-training work.<br><b style="color:var(--ink)">reyeslyanf@gmail.com</b></p>
     <div class="cta">
-      <a class="btn primary" href="mailto:reyeslyanf@gmail.com">Email me</a>
+      <a class="btn primary" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=reyeslyanf@gmail.com&amp;su=Hello%20Lyan" target="_blank" rel="noopener">Email me</a>
+      <button class="btn" type="button" id="copyEmail">Copy email</button>
       <a class="btn" href="https://github.com/lyanreyes" target="_blank" rel="noopener">GitHub</a>
       <a class="btn" href="Lyan_Reyes_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
     </div>
@@ -287,6 +288,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     try{localStorage.setItem('theme',next);}catch(e){}
   });
 })();
+  var ce=document.getElementById('copyEmail');
+  if(ce) ce.addEventListener('click',function(){var v='reyeslyanf@gmail.com',o=ce.textContent;
+    var done=function(){ce.textContent='Copied!';setTimeout(function(){ce.textContent=o;},1800);};
+    var legacy=function(){var ta=document.createElement('textarea');ta.value=v;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(x){}ta.remove();if(ok)done();else ce.textContent=v;};
+    if(navigator.clipboard) navigator.clipboard.writeText(v).then(done,legacy); else legacy();});
 </script>
 </body>
 </html>

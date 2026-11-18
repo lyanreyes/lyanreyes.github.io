@@ -160,7 +160,9 @@
     return `<div class="pad"><div class="eyebrow">contact</div><h2 class="h">Let's work together.</h2>
       <p class="muted">Open to internships, freelance projects, and AI-training work.</p>
       <div class="btns" style="flex-direction:column;align-items:stretch">
-        <a class="btn primary" href="mailto:reyeslyanf@gmail.com">✉ reyeslyanf@gmail.com</a>
+        <a class="btn primary" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=reyeslyanf@gmail.com&amp;su=Hello%20Lyan" target="_blank" rel="noopener">✉ Email me (opens Gmail)</a>
+        <button class="btn" data-copy="reyeslyanf@gmail.com">📋 Copy email · reyeslyanf@gmail.com</button>
+        <a class="btn" href="mailto:reyeslyanf@gmail.com">Use my own mail app</a>
         <a class="btn" href="https://github.com/lyanreyes" target="_blank" rel="noopener">GitHub · github.com/lyanreyes</a>
         <button class="btn" data-open="resume">View resume</button></div></div>`;
   }
@@ -251,6 +253,12 @@
 
   /* delegated clicks inside windows */
   winLayer.addEventListener("click", e => {
+    const cp = e.target.closest("[data-copy]");
+    if (cp) { const v = cp.dataset.copy, old = cp.textContent;
+      const done = () => { cp.textContent = "✓ Copied " + v; setTimeout(() => cp.textContent = old, 1800); };
+      const legacy = () => { const ta = el("textarea"); ta.value = v; ta.style.cssText = "position:fixed;opacity:0"; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch (x) {} ta.remove(); if (ok) done(); else { cp.textContent = v; cp.classList.add("selectable"); } };
+      if (navigator.clipboard) navigator.clipboard.writeText(v).then(done, legacy); else legacy();
+      return; }
     const o = e.target.closest("[data-open]"); if (o) { openApp(o.dataset.open); return; }
     const d = e.target.closest("[data-demo]"); if (d) { openDemo(d.dataset.demo); return; }
     const r = e.target.closest('[data-act="reload"]'); if (r) { const f = r.closest(".win").querySelector("iframe"); if (f) f.src = f.src; }
@@ -285,7 +293,7 @@
       [/optic|physics|light|lens|mirror/, () => { openApp("optics"); return "Optics Lab teaches light and optics with interactive simulations and quizzes. Opening it for you 🔦"; }],
       [/project|work|portfolio|built|made|apps?\b/, () => { openApp("projects"); return "Here's Lyan's project folder! His highlights are SideQuest (mobile app), ScanDex (ML scanner), Drift District (3D game) and Optics Lab (physics site). Ask me about any of them."; }],
       [/skill|stack|language|tech|know|code|program/, () => "Lyan works with Python, JavaScript, TypeScript, SQL, React Native + Expo, Flask, Three.js, Supabase/PostGIS, Git, and Figma. He's also bilingual in English and Tagalog, and good at writing, editing and fact-checking."],
-      [/contact|email|hire|reach|message|intern|job|work with/, () => 'You can email Lyan at <a href="mailto:reyeslyanf@gmail.com">reyeslyanf@gmail.com</a> or check <a href="https://github.com/lyanreyes" target="_blank" rel="noopener">github.com/lyanreyes</a>. He\'s open to internships, freelance projects, and AI-training work. 📬'],
+      [/contact|email|hire|reach|message|intern|job|work with/, () => 'You can email Lyan at <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=reyeslyanf@gmail.com&amp;su=Hello%20Lyan" target="_blank" rel="noopener">reyeslyanf@gmail.com</a> or check <a href="https://github.com/lyanreyes" target="_blank" rel="noopener">github.com/lyanreyes</a>. He\'s open to internships, freelance projects, and AI-training work. 📬'],
       [/resume|cv/, () => { openApp("resume"); return "Here's Lyan's resume. You can download it from the window toolbar. 📄"; }],
       [/school|study|college|education|faith|student/, () => "Lyan is taking BS Computer Science at FAITH Colleges in Tanauan City, Batangas (2024 to present). Before that, he finished senior high at Fidelis Senior High School."],
       [/where|location|from|batangas|philippines/, () => "Lyan is from Sto. Tomas, Batangas, Philippines 🇵🇭. Me? I chipped off an asteroid somewhere past that blue planet."],
@@ -416,7 +424,7 @@
   const sm = $("#startmenu"), sb = $("#startbtn");
   sm.innerHTML = `<div class="sm-head"><img src="img/lyan.png" alt=""><div><b>Lyan Reyes</b><small>BS Computer Science · FAITH Colleges</small></div></div>
     <div class="sm-grid">${["about", "projects", "resume", "sidequest", "scandex", "drift", "optics", "catch", "terminal", "astro", "contact", "video"].map(id => `<button data-sm="${id}">${iconHTML(id)}${label(id)}</button>`).join("")}</div>
-    <div class="sm-foot"><a href="classic.html">Simple view</a><a href="https://github.com/lyanreyes" target="_blank" rel="noopener">GitHub ↗</a><a href="mailto:reyeslyanf@gmail.com">Email</a></div>`;
+    <div class="sm-foot"><a href="classic.html">Simple view</a><a href="https://github.com/lyanreyes" target="_blank" rel="noopener">GitHub ↗</a><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=reyeslyanf@gmail.com&amp;su=Hello%20Lyan" target="_blank" rel="noopener">Email ↗</a></div>`;
   const toggleStart = on => { on = on == null ? !sm.classList.contains("open") : on; sm.classList.toggle("open", on); sb.classList.toggle("on", on); sb.setAttribute("aria-expanded", on); };
   sb.onclick = e => { e.stopPropagation(); toggleStart(); };
   sm.addEventListener("click", e => { const b = e.target.closest("[data-sm]"); if (b) { toggleStart(false); openApp(b.dataset.sm); } });
@@ -443,7 +451,7 @@
       projects: () => Object.keys(projects).map(k => `  <span class="k">${k.padEnd(10)}</span> ${projects[k].tag}`).join("\n") + "\n\nType <span class=\"k\">open sidequest</span> to view one.",
       skills: () => "Python · JavaScript · TypeScript · SQL · React Native/Expo · Flask\nThree.js · Supabase · PostGIS · Git · Figma · English & Tagalog",
       resume: () => { openApp("resume"); return '<span class="ok">Opening resume…</span>'; },
-      contact: () => 'email   <a href="mailto:reyeslyanf@gmail.com">reyeslyanf@gmail.com</a>\ngithub  <a href="https://github.com/lyanreyes" target="_blank" rel="noopener">github.com/lyanreyes</a>',
+      contact: () => 'email   <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=reyeslyanf@gmail.com&amp;su=Hello%20Lyan" target="_blank" rel="noopener">reyeslyanf@gmail.com</a>\ngithub  <a href="https://github.com/lyanreyes" target="_blank" rel="noopener">github.com/lyanreyes</a>',
       play: () => { openApp("catch"); return '<span class="ok">Launching CatchaMon…</span>'; },
       neofetch: () => `<span class="p">   ▄▄▄▄▄    </span> <span class="k">lyan</span>@<span class="k">lyanos</span>\n<span class="p">  █ L   █   </span> OS: LyanOS 1.0 (web)\n<span class="p">  █ ▄▄▄ █   </span> Host: FAITH Colleges, BSCS 3A\n<span class="p">   ▀▀▀▀▀    </span> Shell: lyansh\n             Uptime: since 2024\n             Langs: English, Tagalog\n             Theme: Blueprint Blue`,
       date: () => new Date().toString(),
