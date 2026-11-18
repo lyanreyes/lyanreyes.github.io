@@ -20,7 +20,39 @@ img{display:block;max-width:100%}
 #wall{position:fixed;inset:0;width:100%;height:100%;display:block;background:radial-gradient(120% 90% at 70% 10%,#0e2a6b 0%,#061433 45%,#030817 100%)}
 .wall-mark{position:fixed;right:28px;bottom:calc(var(--task-h) + 22px);text-align:right;pointer-events:none;opacity:.9}
 .wall-mark h1{font:700 clamp(28px,4vw,46px)/1 var(--display);letter-spacing:-.02em;background:linear-gradient(100deg,#fff,#9cc2ff 40%,var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.wall-mark p{font:500 13px var(--mono);color:#d8ffe0;margin-top:8px;letter-spacing:.04em;text-shadow:0 1px 6px #000}
+/* floating astronaut */
+#astro{position:fixed;z-index:5;right:16%;top:12%;width:150px;height:180px;padding:0;cursor:pointer;animation:drift 16s ease-in-out infinite;filter:drop-shadow(0 12px 24px rgba(0,0,0,.6))}
+#astro:focus-visible{outline:2px solid var(--accent-2);outline-offset:6px;border-radius:20px}
+.astro-svg{width:100%;height:100%;overflow:visible;animation:tumble 9s ease-in-out infinite}
+.arm-wave{transform-origin:93px 80px;animation:wave 2.4s ease-in-out infinite}
+.beacon{animation:blink 1.6s steps(2) infinite}
+.astro-bubble{position:absolute;right:92%;top:6px;white-space:nowrap;background:#fff;color:#0b1b3a;font:600 13px var(--sans);padding:8px 12px;border-radius:14px 14px 4px 14px;box-shadow:0 8px 20px rgba(0,0,0,.4);animation:bubble 7s ease-in-out infinite}
+#astro:hover .astro-bubble{opacity:1;transform:none;animation:none}
+@keyframes drift{0%,100%{transform:translate(0,0)}25%{transform:translate(-30px,18px)}50%{transform:translate(-10px,36px)}75%{transform:translate(22px,14px)}}
+@keyframes tumble{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(10deg)}}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}15%{transform:rotate(-28deg)}30%{transform:rotate(10deg)}45%{transform:rotate(-22deg)}}
+@keyframes blink{50%{opacity:.2}}
+@keyframes bubble{0%,8%{opacity:0;transform:translateY(6px)}14%,70%{opacity:1;transform:none}78%,100%{opacity:0;transform:translateY(-4px)}}
+
+/* astronaut chat */
+.chat{display:flex;flex-direction:column;height:100%}
+.chat-log{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;padding:9px 13px;border-radius:14px;font-size:14px;line-height:1.5;user-select:text;-webkit-user-select:text}
+.msg.bot{align-self:flex-start;background:var(--surface-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.me{align-self:flex-end;background:var(--accent);color:var(--accent-ink);border-bottom-right-radius:4px;font-weight:500}
+.msg a{color:var(--accent-2)}
+.msg.typing{color:var(--muted);font-style:italic}
+.chat-chips{display:flex;gap:6px;padding:0 12px 10px;overflow-x:auto;scrollbar-width:none}
+.chat-chips button{flex:none;font-size:12.5px;padding:6px 11px;border-radius:999px;background:var(--chip);color:var(--chip-ink);border:1px solid var(--line)}
+.chat-chips button:hover{border-color:var(--accent)}
+.chat-in{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
+.chat-in input{flex:1;min-width:0;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:999px;padding:9px 14px;color:var(--ink);font:inherit;font-size:14px;outline:none}
+.chat-in input:focus{border-color:var(--accent)}
+.chat-in button{padding:0 16px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:600}
+.chat-head{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.chat-head i{width:8px;height:8px;border-radius:50%;background:#7ef0b0;box-shadow:0 0 8px #7ef0b0}
+
+.wall-mark p{font:500 13px var(--mono);color:#d8e6ff;margin-top:8px;letter-spacing:.04em;text-shadow:0 1px 6px #000}
 .wall-mark{filter:drop-shadow(0 2px 14px rgba(0,0,0,.85))}
 .icon span{text-shadow:0 1px 4px #000,0 0 10px rgba(0,0,0,.8)}
 
@@ -188,6 +220,8 @@ ul.b b{color:var(--ink);font-weight:600}
 @media (max-width:760px){
   :root{--task-h:64px}
   .wall-mark{display:none}
+  #astro{top:auto;right:14px;bottom:calc(var(--task-h) + 18px);width:104px;height:126px}
+  .astro-bubble{font-size:12px;padding:6px 10px}
   #widget{display:flex;position:fixed;left:16px;right:16px;top:max(16px,env(safe-area-inset-top));gap:14px;align-items:center;padding:16px;border-radius:20px;background:rgba(9,20,46,.62);border:1px solid var(--line);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
   #widget img{width:64px;height:64px;border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 0 0 2px var(--accent);flex:none}
   #widget b{font:700 19px var(--display);display:block;line-height:1.2}

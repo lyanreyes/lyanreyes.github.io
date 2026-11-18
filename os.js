@@ -29,9 +29,18 @@
     terminal: ["#0f1b36", "#24365f", G.term], contact: ["#18c29c", "#21a3ff", G.mail], video: ["#8a5cff", "#ff5fb6", G.play],
     browser: ["#2563eb", "#38d6ff", G.globe], catch: ["#1e3fae", "#38d6ff", G.bolt], simple: ["#334a7d", "#5a74ad", G.layout]
   };
+  /* original app logos */
+  const logos = {
+    sidequest: '<rect width="48" height="48" rx="11" fill="#0A090D"/><rect x="9" y="9" width="30" height="30" rx="9" fill="#9CFF27"/><path d="M29.5 17.5c-1.2-1.6-3.2-2.5-5.5-2.5-3.3 0-5.6 1.8-5.6 4.4 0 5.6 11.4 3.4 11.4 9 0 2.7-2.5 4.6-5.9 4.6-2.6 0-4.8-1-6-2.8" fill="none" stroke="#0A090D" stroke-width="3.4" stroke-linecap="round"/><circle cx="36" cy="12" r="4" fill="#A985F7"/>',
+    scandex: '<defs><linearGradient id="lg-sd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff4b2b"/><stop offset="1" stop-color="#c81d11"/></linearGradient></defs><rect width="48" height="48" rx="11" fill="url(#lg-sd)"/><g fill="none" stroke="#ffd23f" stroke-width="3.2" stroke-linecap="round"><path d="M10 17v-5a2 2 0 0 1 2-2h5M31 10h5a2 2 0 0 1 2 2v5M38 31v5a2 2 0 0 1-2 2h-5M17 38h-5a2 2 0 0 1-2-2v-5"/></g><rect x="17" y="14" width="14" height="20" rx="2.5" fill="#fff"/><rect x="19.5" y="16.5" width="9" height="8" rx="1.2" fill="#38d6ff"/><path d="M19.5 28h9M19.5 31h6" stroke="#c81d11" stroke-width="1.6" stroke-linecap="round"/><path d="M8 24h32" stroke="#7ef0b0" stroke-width="1.6" opacity=".9"/>',
+    drift: '<rect width="48" height="48" rx="11" fill="#111318"/><g fill="#ff2a2a"><path d="M9 31 17 15h5l-8 16Z"/><path d="M18 31 26 15h5l-8 16Z" opacity=".85"/><path d="M27 31 35 15h5l-8 16Z" opacity=".65"/></g><path d="M8 35h32" stroke="#fff" stroke-width="2" stroke-dasharray="4 3" opacity=".7"/>',
+    optics: '<rect width="48" height="48" rx="11" fill="#fff"/><path d="M5 27 20 24" stroke="#111" stroke-width="2"/><path d="M20 12 31 34H9Z" fill="#e9ecff" stroke="#111" stroke-width="1.8" stroke-linejoin="round"/><g stroke-width="2.2" stroke-linecap="round"><path d="M24 25 43 20" stroke="#ff3b3b"/><path d="M24.5 26 43 24" stroke="#ffb02e"/><path d="M25 27 43 28" stroke="#2ecc71"/><path d="M25 28 43 32" stroke="#3b82f6"/><path d="M25 29 42 36" stroke="#8b5cf6"/></g>',
+    catch: '<defs><linearGradient id="lg-cm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1640"/><stop offset="1" stop-color="#1e3fae"/></linearGradient><radialGradient id="rg-cm" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#e9fbff"/><stop offset=".45" stop-color="#5fb8ff"/><stop offset="1" stop-color="#1a3fa8"/></radialGradient></defs><rect width="48" height="48" rx="11" fill="url(#lg-cm)"/><circle cx="24" cy="24" r="11" fill="url(#rg-cm)"/><ellipse cx="24" cy="24" rx="16" ry="5" fill="none" stroke="#c8f0ff" stroke-width="1.8" transform="rotate(-25 24 24)"/><path d="M25.5 17 20 25h4l-1.5 6 5.5-8h-4Z" fill="#fff"/>',
+    astro: '<defs><linearGradient id="lg-as" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e2a6b"/><stop offset="1" stop-color="#38d6ff"/></linearGradient></defs><rect width="48" height="48" rx="11" fill="url(#lg-as)"/><circle cx="24" cy="23" r="12" fill="#fff"/><ellipse cx="24" cy="24" rx="8.5" ry="7" fill="#1b3f9e"/><ellipse cx="21" cy="21" rx="3" ry="1.8" fill="#fff" opacity=".6"/><rect x="17" y="34" width="14" height="6" rx="3" fill="#fff"/>'
+  };
   function iconHTML(id) {
     const p = projects[id];
-    if (p) return `<div class="ic thumb"><img src="${p.icon}" alt="" loading="lazy"></div>`;
+    if (logos[id]) return `<div class="ic"><svg viewBox="0 0 48 48">${logos[id]}</svg></div>`;
     const t = tiles[id] || tiles.browser;
     return `<div class="ic"><svg viewBox="0 0 48 48"><defs><linearGradient id="g-${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${t[0]}"/><stop offset="1" stop-color="${t[1]}"/></linearGradient></defs><rect width="48" height="48" rx="11" fill="url(#g-${id})"/><g fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${t[2]}</g></svg></div>`;
   }
@@ -84,13 +93,13 @@
     terminal: { title: "Terminal", w: 680, h: 440, flush: true, render: renderTerminal },
     contact: { title: "Contact", w: 460, h: 420, render: renderContact },
     video: { title: "SideQuest Promo.mp4", w: 820, h: 520, flush: true, render: () => '<video src="demos/sidequest-promo.mp4" controls playsinline style="flex:1;width:100%;min-height:0;background:#000"></video>' },
-    catch: { title: "Voltbit Catch", w: 520, h: 720, flush: true, render: () => '<div class="game"><canvas></canvas><div class="game-hud"><span class="pill" data-hud="count">Caught: 0</span><span class="pill" data-hud="orbs">Orbs: 10</span></div><div class="game-msg"></div></div>', mount: mountCatch },
+    catch: { title: "CatchaMon", w: 520, h: 720, flush: true, render: () => '<div class="game"><canvas></canvas><div class="game-hud"><span class="pill" data-hud="count">Caught: 0</span><span class="pill" data-hud="orbs">Orbs: 10</span></div><div class="game-msg"></div></div>', mount: mountCatch },
     simple: { title: "Simple view", action: () => { location.href = "classic.html"; } }
   };
   Object.keys(projects).forEach(id => { apps[id] = { title: projects[id].full, w: 760, h: 640, render: () => renderProject(id) }; });
 
   const desktopOrder = ["about", "projects", "sidequest", "scandex", "drift", "optics", "catch", "terminal", "resume", "video", "contact", "simple"];
-  const labels = { about: "About Me", projects: "Projects", resume: "Resume.pdf", terminal: "Terminal", contact: "Contact", video: "Promo Video", catch: "Voltbit Catch", simple: "Simple View" };
+  const labels = { about: "About Me", projects: "Projects", resume: "Resume.pdf", terminal: "Terminal", contact: "Contact", video: "Promo Video", catch: "CatchaMon", simple: "Simple View" };
   const label = id => labels[id] || projects[id].name;
 
   /* ---------- renderers ---------- */
@@ -120,7 +129,7 @@
         <button class="on" data-open="projects">${iconHTML("projects")}Projects</button>
         <button data-open="about">${iconHTML("about")}About Me</button>
         <button data-open="resume">${iconHTML("resume")}Resume.pdf</button>
-        <button data-open="catch">${iconHTML("catch")}Voltbit Catch</button>
+        <button data-open="catch">${iconHTML("catch")}CatchaMon</button>
         <button data-open="terminal">${iconHTML("terminal")}Terminal</button>
       </aside>
       <div class="ex-main"><div class="ex-bar"><span class="path">C:\\Users\\Lyan\\Projects</span></div>
@@ -247,6 +256,63 @@
     const r = e.target.closest('[data-act="reload"]'); if (r) { const f = r.closest(".win").querySelector("iframe"); if (f) f.src = f.src; }
   });
 
+  /* ---------- Astro: the floating astronaut you can chat with ---------- */
+  apps.astro = { title: "Astro · Mission Chat", w: 440, h: 600, flush: true, render: () =>
+    '<div class="chat"><div class="chat-head"><i></i>Astro is online · ask about Lyan, his projects, or space</div><div class="chat-log" aria-live="polite"></div>' +
+    '<div class="chat-chips">' + ["Who is Lyan?", "Show projects", "What are his skills?", "How do I contact him?", "Tell me a space fact", "Play a game"].map(q => `<button>${q}</button>`).join("") + '</div>' +
+    '<form class="chat-in"><input placeholder="Type a message…" aria-label="Message Astro" autocomplete="off"><button type="submit">Send</button></form></div>',
+    mount: mountAstro };
+  labels.astro = "Ask Astro";
+  function mountAstro(body) {
+    const log = $(".chat-log", body), form = $("form", body), inp = $("input", body);
+    const add = (html, who) => { const m = el("div", "msg " + who, html); log.appendChild(m); log.scrollTop = log.scrollHeight; return m; };
+    const facts = [
+      "A day on Venus is longer than its year. It spins that slowly! 🪐",
+      "Neutron stars are so dense that a teaspoon of one would weigh about a billion tonnes.",
+      "Footprints left on the Moon can last millions of years, because there's no wind to blow them away.",
+      "Light from the Sun takes about 8 minutes and 20 seconds to reach Earth.",
+      "Jupiter's Great Red Spot is a storm wider than Earth that has lasted hundreds of years."
+    ];
+    const jokes = ["Why did the astronaut break up with the app? It needed more space. 🚀", "How do you organize a space party? You planet. 🪐", "I tried to write a joke about the Moon, but it didn't have enough atmosphere."];
+    const pick = a => a[Math.floor(Math.random() * a.length)];
+    const rules = [
+      [/^(hi|hello|hey|yo|kumusta|musta|hoy)\b/, () => "Hey there, space traveler! 👋 I'm Astro, Lyan's mission assistant. Ask me about Lyan, his projects, skills, or how to reach him."],
+      [/who.*(lyan|he|you made|owner|this)|about lyan|tell me about/, () => { openApp("about"); return "Lyan Reyes is a 3rd-year BS Computer Science student at FAITH Colleges in Batangas, Philippines. He builds and ships real apps: a gig app for Android, a machine-learning card scanner, and a multiplayer racing game. I opened his About window for you!"; }],
+      [/sidequest|gig/, () => { openApp("sidequest"); return "SideQuest is a location-based gig app made by Lyan's team of 4. Clients post tasks, and nearby workers send offers, chat, and get paid via GCash. It's built with React Native, Expo and Supabase. I opened it for you, and you can even download the APK there!"; }],
+      [/scandex|scan|card/, () => { openApp("scandex"); return "ScanDex identifies trading cards from a phone photo among 20,000+ cards using image fingerprints and a learned ranker: 71% top-1 and 97% precision on auto-accepted matches. Opening it now 🔍"; }],
+      [/drift|race|racing|car/, () => { openApp("drift"); return "Drift District is a free 3D multiplayer racing game in the browser. Make a lobby, send the link, and race your friends. No server needed! 🏎️"; }],
+      [/optic|physics|light|lens|mirror/, () => { openApp("optics"); return "Optics Lab teaches light and optics with interactive simulations and quizzes. Opening it for you 🔦"; }],
+      [/project|work|portfolio|built|made|apps?\b/, () => { openApp("projects"); return "Here's Lyan's project folder! His highlights are SideQuest (mobile app), ScanDex (ML scanner), Drift District (3D game) and Optics Lab (physics site). Ask me about any of them."; }],
+      [/skill|stack|language|tech|know|code|program/, () => "Lyan works with Python, JavaScript, TypeScript, SQL, React Native + Expo, Flask, Three.js, Supabase/PostGIS, Git, and Figma. He's also bilingual in English and Tagalog, and good at writing, editing and fact-checking."],
+      [/contact|email|hire|reach|message|intern|job|work with/, () => 'You can email Lyan at <a href="mailto:reyeslyanf@gmail.com">reyeslyanf@gmail.com</a> or check <a href="https://github.com/lyanreyes" target="_blank" rel="noopener">github.com/lyanreyes</a>. He\'s open to internships, freelance projects, and AI-training work. 📬'],
+      [/resume|cv/, () => { openApp("resume"); return "Here's Lyan's resume. You can download it from the window toolbar. 📄"; }],
+      [/school|study|college|education|faith|student/, () => "Lyan is taking BS Computer Science at FAITH Colleges in Tanauan City, Batangas (2024 to present). Before that, he finished senior high at Fidelis Senior High School."],
+      [/where|location|from|batangas|philippines/, () => "Lyan is from Sto. Tomas, Batangas, Philippines 🇵🇭. I'm from… somewhere past that blue planet behind me."],
+      [/game|play|catch|bored/, () => { openApp("catch"); return "Try CatchaMon! Flick the orb (or tap the creature) to catch a Voltbit. Rare ones are hiding out there ✨"; }],
+      [/fact|space|planet|star|universe|galaxy/, () => pick(facts)],
+      [/joke|funny|laugh/, () => pick(jokes)],
+      [/terminal|command|hack/, () => { openApp("terminal"); return "Opening the terminal. Type <b>help</b> to see the commands 💻"; }],
+      [/thank|salamat|ty\b|nice|cool|awesome|great/, () => "Anytime! 🚀 Anything else you'd like to know about Lyan?"],
+      [/who are you|your name|what are you/, () => "I'm Astro, a little astronaut floating around Lyan's portfolio. I answer from a script Lyan wrote, so I know a lot about him but not everything!"],
+      [/bye|goodbye|see you/, () => "Safe travels, space traveler! 👋"]
+    ];
+    function reply(q) {
+      const s = q.toLowerCase().trim();
+      for (const [re, fn] of rules) if (re.test(s)) return fn();
+      return "Hmm, my antenna didn't catch that 📡. Try asking about Lyan, his projects (SideQuest, ScanDex, Drift District, Optics Lab), his skills, his resume, or how to contact him.";
+    }
+    function send(q) {
+      if (!q.trim()) return; add(esc(q), "me");
+      const t = add("Astro is typing…", "bot typing");
+      setTimeout(() => { t.remove(); add(reply(q), "bot"); }, 450 + Math.random() * 450);
+    }
+    add("Hi! I'm <b>Astro</b> 👨‍🚀, Lyan's mission assistant. Ask me anything about Lyan and his work, or tap a suggestion below.", "bot");
+    form.addEventListener("submit", e => { e.preventDefault(); const v = inp.value; inp.value = ""; send(v); });
+    $(".chat-chips", body).addEventListener("click", e => { const b = e.target.closest("button"); if (b) send(b.textContent); });
+    if (!isMobile()) setTimeout(() => inp.focus(), 60);
+  }
+  $("#astro").addEventListener("click", () => openApp("astro"));
+
   /* ---------- desktop ---------- */
   const desk = $("#desktop");
   desktopOrder.forEach(id => {
@@ -265,7 +331,7 @@
   /* ---------- start menu ---------- */
   const sm = $("#startmenu"), sb = $("#startbtn");
   sm.innerHTML = `<div class="sm-head"><img src="img/lyan.png" alt=""><div><b>Lyan Reyes</b><small>BS Computer Science · FAITH Colleges</small></div></div>
-    <div class="sm-grid">${["about", "projects", "resume", "sidequest", "scandex", "drift", "optics", "catch", "terminal"].map(id => `<button data-sm="${id}">${iconHTML(id)}${label(id)}</button>`).join("")}</div>
+    <div class="sm-grid">${["about", "projects", "resume", "sidequest", "scandex", "drift", "optics", "catch", "terminal", "astro", "contact", "video"].map(id => `<button data-sm="${id}">${iconHTML(id)}${label(id)}</button>`).join("")}</div>
     <div class="sm-foot"><a href="classic.html">Simple view</a><a href="https://github.com/lyanreyes" target="_blank" rel="noopener">GitHub ↗</a><a href="mailto:reyeslyanf@gmail.com">Email</a></div>`;
   const toggleStart = on => { on = on == null ? !sm.classList.contains("open") : on; sm.classList.toggle("open", on); sb.classList.toggle("on", on); sb.setAttribute("aria-expanded", on); };
   sb.onclick = e => { e.stopPropagation(); toggleStart(); };
@@ -288,19 +354,19 @@
     const t = $(".term", body), out = $(".out", t), inp = $("input", t), hist = []; let hi = 0;
     const print = h => { out.insertAdjacentHTML("beforeend", `<pre>${h}</pre>`); t.scrollTop = t.scrollHeight; };
     const cmds = {
-      help: () => `<span class="k">Commands</span>\n  about      who I am\n  projects   list my projects\n  open &lt;name&gt; open a project (sidequest, scandex, drift, optics)\n  skills     what I work with\n  resume     open my resume\n  contact    how to reach me\n  play       start Voltbit Catch\n  neofetch   system info\n  clear      clear the screen`,
+      help: () => `<span class="k">Commands</span>\n  about      who I am\n  projects   list my projects\n  open &lt;name&gt; open a project (sidequest, scandex, drift, optics)\n  skills     what I work with\n  resume     open my resume\n  contact    how to reach me\n  play       start CatchaMon\n  neofetch   system info\n  clear      clear the screen`,
       about: () => "Lyan Reyes. 3rd-year BS Computer Science student at FAITH Colleges,\nBatangas, PH. I build and ship real apps: mobile, web, and ML.",
       whoami: () => "lyan",
       projects: () => Object.keys(projects).map(k => `  <span class="k">${k.padEnd(10)}</span> ${projects[k].tag}`).join("\n") + "\n\nType <span class=\"k\">open sidequest</span> to view one.",
       skills: () => "Python · JavaScript · TypeScript · SQL · React Native/Expo · Flask\nThree.js · Supabase · PostGIS · Git · Figma · English & Tagalog",
       resume: () => { openApp("resume"); return '<span class="ok">Opening resume…</span>'; },
       contact: () => 'email   <a href="mailto:reyeslyanf@gmail.com">reyeslyanf@gmail.com</a>\ngithub  <a href="https://github.com/lyanreyes" target="_blank" rel="noopener">github.com/lyanreyes</a>',
-      play: () => { openApp("catch"); return '<span class="ok">Launching Voltbit Catch…</span>'; },
+      play: () => { openApp("catch"); return '<span class="ok">Launching CatchaMon…</span>'; },
       neofetch: () => `<span class="p">   ▄▄▄▄▄    </span> <span class="k">lyan</span>@<span class="k">lyanos</span>\n<span class="p">  █ L   █   </span> OS: LyanOS 1.0 (web)\n<span class="p">  █ ▄▄▄ █   </span> Host: FAITH Colleges, BSCS 3A\n<span class="p">   ▀▀▀▀▀    </span> Shell: lyansh\n             Uptime: since 2024\n             Langs: English, Tagalog\n             Theme: Blueprint Blue`,
       date: () => new Date().toString(),
       echo: a => esc(a.join(" ")),
       sudo: () => '<span class="err">Nice try. 😄</span>',
-      ls: () => "about.txt  projects/  resume.pdf  voltbit-catch.exe"
+      ls: () => "about.txt  projects/  resume.pdf  catchamon.exe"
     };
     const run = line => {
       print(`<span class="p">lyan@lyanos:~$</span> ${esc(line)}`);
@@ -319,7 +385,7 @@
     if (!isMobile()) setTimeout(() => inp.focus(), 50);
   };
 
-  /* ---------- Voltbit Catch (original mini-game) ---------- */
+  /* ---------- CatchaMon (original mini-game) ---------- */
   function mountCatch(body) {
     const wrap = $(".game", body), cv = $("canvas", wrap), ctx = cv.getContext("2d"), msg = $(".game-msg", wrap);
     const hudC = $('[data-hud="count"]', wrap), hudO = $('[data-hud="orbs"]', wrap);
@@ -500,7 +566,7 @@ void main(){
  vec2 sp=gl_FragCoord.xy/R.y*90.; vec2 cell=floor(sp); float rnd=h1(cell);
  float star=step(.993,rnd)*(.5+.5*sin(T*1.7+rnd*60.))*smoothstep(.5,.0,length(fract(sp)-.5));
  vec3 col=vec3(.004,.008,.016)+vec3(.85,.95,1.)*star;
- col+=vec3(.02,.06,.04)*fbm(uv*2.+T*.01);
+ col+=vec3(.02,.04,.09)*fbm(uv*2.+T*.01);
  /* planet: huge sphere rising from the lower right */
  vec2 c=vec2(asp>1.?.45:.15,-1.25); float pr=asp>1.?1.55:1.3;
  vec2 q=(uv-c)/pr; float d=length(q);
@@ -511,12 +577,12 @@ void main(){
   vec2 w=vec2(fbm(s*1.4+vec2(0.,T*.02)),fbm(s*1.4+vec2(5.2,1.3)-T*.018));
   vec2 w2=vec2(fbm(s*2.+3.8*w+vec2(1.7,9.2)+T*.03),fbm(s*2.+3.8*w+vec2(8.3,2.8)-T*.02));
   float f=fbm(s*2.6+4.2*w2);
-  vec3 deep=vec3(.01,.07,.03),mid=vec3(.12,.55,.12),bright=vec3(.62,.95,.3),hot=vec3(.95,.42,.08),ember=vec3(.45,.1,.03);
+  vec3 deep=vec3(.01,.03,.12),mid=vec3(.08,.32,.85),bright=vec3(.5,.9,1.),hot=vec3(.55,.35,1.),ember=vec3(.12,.06,.4);
   vec3 a=mix(deep,mid,smoothstep(.25,.65,f));
   a=mix(a,bright,smoothstep(.62,.9,f)*.75);
   float o=smoothstep(.42,.72,w2.x)*smoothstep(.3,.7,fbm(s*.7+vec2(3.,7.)+T*.01));
   a=mix(a,mix(ember,hot,f),o*.85);
-  a+=vec3(.7,1.,.4)*pow(smoothstep(.55,.95,f),6.)*.35;
+  a+=vec3(.6,.95,1.)*pow(smoothstep(.55,.95,f),6.)*.35;
   float lit=clamp(dot(n,L),0.,1.);
   a*=.08+1.15*lit;
   a*=smoothstep(0.,.18,z);
@@ -525,8 +591,8 @@ void main(){
  /* atmosphere glow on the rim */
  float rim=exp(-abs(d-1.)*pr*16.);
  float side=clamp(dot(normalize(vec3(q,.2)),L)*.8+.35,0.,1.);
- col+=vec3(.3,.95,.45)*rim*.55*side;
- col+=vec3(.15,.5,.25)*exp(-max(d-1.,0.)*pr*4.)*.12*side*step(1.,d);
+ col+=vec3(.35,.7,1.)*rim*.6*side;
+ col+=vec3(.15,.3,.7)*exp(-max(d-1.,0.)*pr*4.)*.12*side*step(1.,d);
  col=pow(col,vec3(.95));
  gl_FragColor=vec4(col,1.);
 }`;
