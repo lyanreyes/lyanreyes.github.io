@@ -36,7 +36,7 @@
     drift: '<rect width="48" height="48" rx="11" fill="#111318"/><g fill="#ff2a2a"><path d="M9 31 17 15h5l-8 16Z"/><path d="M18 31 26 15h5l-8 16Z" opacity=".85"/><path d="M27 31 35 15h5l-8 16Z" opacity=".65"/></g><path d="M8 35h32" stroke="#fff" stroke-width="2" stroke-dasharray="4 3" opacity=".7"/>',
     optics: '<rect width="48" height="48" rx="11" fill="#fff"/><path d="M5 27 20 24" stroke="#111" stroke-width="2"/><path d="M20 12 31 34H9Z" fill="#e9ecff" stroke="#111" stroke-width="1.8" stroke-linejoin="round"/><g stroke-width="2.2" stroke-linecap="round"><path d="M24 25 43 20" stroke="#ff3b3b"/><path d="M24.5 26 43 24" stroke="#ffb02e"/><path d="M25 27 43 28" stroke="#2ecc71"/><path d="M25 28 43 32" stroke="#3b82f6"/><path d="M25 29 42 36" stroke="#8b5cf6"/></g>',
     catch: '<defs><linearGradient id="lg-cm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1640"/><stop offset="1" stop-color="#1e3fae"/></linearGradient><radialGradient id="rg-cm" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#e9fbff"/><stop offset=".45" stop-color="#5fb8ff"/><stop offset="1" stop-color="#1a3fa8"/></radialGradient></defs><rect width="48" height="48" rx="11" fill="url(#lg-cm)"/><circle cx="24" cy="24" r="11" fill="url(#rg-cm)"/><ellipse cx="24" cy="24" rx="16" ry="5" fill="none" stroke="#c8f0ff" stroke-width="1.8" transform="rotate(-25 24 24)"/><path d="M25.5 17 20 25h4l-1.5 6 5.5-8h-4Z" fill="#fff"/>',
-    astro: '<defs><linearGradient id="lg-as" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e2a6b"/><stop offset="1" stop-color="#38d6ff"/></linearGradient></defs><rect width="48" height="48" rx="11" fill="url(#lg-as)"/><circle cx="24" cy="23" r="12" fill="#fff"/><ellipse cx="24" cy="24" rx="8.5" ry="7" fill="#1b3f9e"/><ellipse cx="21" cy="21" rx="3" ry="1.8" fill="#fff" opacity=".6"/><rect x="17" y="34" width="14" height="6" rx="3" fill="#fff"/>'
+    astro: '<defs><linearGradient id="lg-as" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e2a6b"/><stop offset="1" stop-color="#38d6ff"/></linearGradient></defs><rect width="48" height="48" rx="11" fill="url(#lg-as)"/><path d="M24 11c8 0 13 5 13 13s-5 14-13 14-13-5-13-13 5-14 13-14Z" fill="#9b8b78"/><path d="M20 12l2-6 3 6M26 12l3-5 2 6" fill="#bff0ff"/><ellipse cx="19.5" cy="23" rx="3" ry="3.6" fill="#38d6ff"/><ellipse cx="28.5" cy="23" rx="3" ry="3.6" fill="#38d6ff"/><path d="M20.5 30q3.5 2.6 7 0" stroke="#3a312a" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
   };
   function iconHTML(id) {
     const p = projects[id];
@@ -256,14 +256,14 @@
     const r = e.target.closest('[data-act="reload"]'); if (r) { const f = r.closest(".win").querySelector("iframe"); if (f) f.src = f.src; }
   });
 
-  /* ---------- Astro: the floating astronaut you can chat with ---------- */
-  apps.astro = { title: "Astro · Mission Chat", w: 440, h: 600, flush: true, render: () =>
-    '<div class="chat"><div class="chat-head"><i></i>Astro is online · ask about Lyan, his projects, or space</div><div class="chat-log" aria-live="polite"></div>' +
+  /* ---------- Rocky: the floating astronaut you can chat with ---------- */
+  apps.astro = { title: "Rocky · Mission Chat", w: 440, h: 600, flush: true, render: () =>
+    '<div class="chat"><div class="chat-head"><i></i>Rocky is online · ask about Lyan, his projects, or space</div><div class="chat-log" aria-live="polite"></div>' +
     '<div class="chat-chips">' + ["Who is Lyan?", "Show projects", "What are his skills?", "How do I contact him?", "Tell me a space fact", "Play a game"].map(q => `<button>${q}</button>`).join("") + '</div>' +
-    '<form class="chat-in"><input placeholder="Type a message…" aria-label="Message Astro" autocomplete="off"><button type="submit">Send</button></form></div>',
-    mount: mountAstro };
-  labels.astro = "Ask Astro";
-  function mountAstro(body) {
+    '<form class="chat-in"><input placeholder="Type a message…" aria-label="Message Rocky" autocomplete="off"><button type="submit">Send</button></form></div>',
+    mount: mountRocky };
+  labels.astro = "Ask Rocky";
+  function mountRocky(body) {
     const log = $(".chat-log", body), form = $("form", body), inp = $("input", body);
     const add = (html, who) => { const m = el("div", "msg " + who, html); log.appendChild(m); log.scrollTop = log.scrollHeight; return m; };
     const facts = [
@@ -276,7 +276,7 @@
     const jokes = ["Why did the astronaut break up with the app? It needed more space. 🚀", "How do you organize a space party? You planet. 🪐", "I tried to write a joke about the Moon, but it didn't have enough atmosphere."];
     const pick = a => a[Math.floor(Math.random() * a.length)];
     const rules = [
-      [/^(hi|hello|hey|yo|kumusta|musta|hoy)\b/, () => "Hey there, space traveler! 👋 I'm Astro, Lyan's mission assistant. Ask me about Lyan, his projects, skills, or how to reach him."],
+      [/^(hi|hello|hey|yo|kumusta|musta|hoy)\b/, () => "Hey there, space traveler! 👋 I'm Rocky, Lyan's mission assistant. Ask me about Lyan, his projects, skills, or how to reach him."],
       [/who.*(lyan|he|you made|owner|this)|about lyan|tell me about/, () => { openApp("about"); return "Lyan Reyes is a 3rd-year BS Computer Science student at FAITH Colleges in Batangas, Philippines. He builds and ships real apps: a gig app for Android, a machine-learning card scanner, and a multiplayer racing game. I opened his About window for you!"; }],
       [/sidequest|gig/, () => { openApp("sidequest"); return "SideQuest is a location-based gig app made by Lyan's team of 4. Clients post tasks, and nearby workers send offers, chat, and get paid via GCash. It's built with React Native, Expo and Supabase. I opened it for you, and you can even download the APK there!"; }],
       [/scandex|scan|card/, () => { openApp("scandex"); return "ScanDex identifies trading cards from a phone photo among 20,000+ cards using image fingerprints and a learned ranker: 71% top-1 and 97% precision on auto-accepted matches. Opening it now 🔍"; }],
@@ -287,13 +287,13 @@
       [/contact|email|hire|reach|message|intern|job|work with/, () => 'You can email Lyan at <a href="mailto:reyeslyanf@gmail.com">reyeslyanf@gmail.com</a> or check <a href="https://github.com/lyanreyes" target="_blank" rel="noopener">github.com/lyanreyes</a>. He\'s open to internships, freelance projects, and AI-training work. 📬'],
       [/resume|cv/, () => { openApp("resume"); return "Here's Lyan's resume. You can download it from the window toolbar. 📄"; }],
       [/school|study|college|education|faith|student/, () => "Lyan is taking BS Computer Science at FAITH Colleges in Tanauan City, Batangas (2024 to present). Before that, he finished senior high at Fidelis Senior High School."],
-      [/where|location|from|batangas|philippines/, () => "Lyan is from Sto. Tomas, Batangas, Philippines 🇵🇭. I'm from… somewhere past that blue planet behind me."],
+      [/where|location|from|batangas|philippines/, () => "Lyan is from Sto. Tomas, Batangas, Philippines 🇵🇭. Me? I chipped off an asteroid somewhere past that blue planet."],
       [/game|play|catch|bored/, () => { openApp("catch"); return "Try CatchaMon! Flick the orb (or tap the creature) to catch a Voltbit. Rare ones are hiding out there ✨"; }],
       [/fact|space|planet|star|universe|galaxy/, () => pick(facts)],
       [/joke|funny|laugh/, () => pick(jokes)],
       [/terminal|command|hack/, () => { openApp("terminal"); return "Opening the terminal. Type <b>help</b> to see the commands 💻"; }],
       [/thank|salamat|ty\b|nice|cool|awesome|great/, () => "Anytime! 🚀 Anything else you'd like to know about Lyan?"],
-      [/who are you|your name|what are you/, () => "I'm Astro, a little astronaut floating around Lyan's portfolio. I answer from a script Lyan wrote, so I know a lot about him but not everything!"],
+      [/who are you|your name|what are you/, () => "I'm Rocky, a little space boulder with crystal eyes, floating in a bubble helmet around Lyan's portfolio. I answer from a script Lyan wrote, so I know a lot about him but not everything!"],
       [/bye|goodbye|see you/, () => "Safe travels, space traveler! 👋"]
     ];
     function reply(q) {
@@ -303,10 +303,10 @@
     }
     function send(q) {
       if (!q.trim()) return; add(esc(q), "me");
-      const t = add("Astro is typing…", "bot typing");
+      const t = add("Rocky is typing…", "bot typing");
       setTimeout(() => { t.remove(); add(reply(q), "bot"); }, 450 + Math.random() * 450);
     }
-    add("Hi! I'm <b>Astro</b> 👨‍🚀, Lyan's mission assistant. Ask me anything about Lyan and his work, or tap a suggestion below.", "bot");
+    add("Hi! I'm <b>Rocky</b> 🪨, a space rock and Lyan's mission buddy. Ask me anything about Lyan and his work, or tap a suggestion below.", "bot");
     form.addEventListener("submit", e => { e.preventDefault(); const v = inp.value; inp.value = ""; send(v); });
     $(".chat-chips", body).addEventListener("click", e => { const b = e.target.closest("button"); if (b) send(b.textContent); });
     if (!isMobile()) setTimeout(() => inp.focus(), 60);
