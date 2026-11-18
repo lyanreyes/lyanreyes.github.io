@@ -482,8 +482,78 @@
     return () => { alive = false; cancelAnimationFrame(raf); ro.disconnect(); };
   }
 
-  /* ---------- wallpaper: blueprint constellation ---------- */
-  (function wallpaper() {
+  /* ---------- wallpaper: animated gas-giant planet (WebGL shader, original) ---------- */
+  function planetWallpaper() {
+    const c = $("#wall"); const gl = c.getContext("webgl", { antialias: false, alpha: false, powerPreference: "low-power" });
+    if (!gl) return false;
+    const VS = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+    const FS = `precision highp float;
+uniform vec2 R;uniform float T;uniform vec2 M;
+float h1(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float nz(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);
+ return mix(mix(h1(i),h1(i+vec2(1.,0.)),u.x),mix(h1(i+vec2(0.,1.)),h1(i+vec2(1.,1.)),u.x),u.y);}
+float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<5;i++){v+=a*nz(p);p=m*p;a*=.5;}return v;}
+void main(){
+ vec2 uv=(gl_FragCoord.xy-.5*R)/R.y; uv+=M*.015;
+ float asp=R.x/R.y;
+ /* stars */
+ vec2 sp=gl_FragCoord.xy/R.y*90.; vec2 cell=floor(sp); float rnd=h1(cell);
+ float star=step(.993,rnd)*(.5+.5*sin(T*1.7+rnd*60.))*smoothstep(.5,.0,length(fract(sp)-.5));
+ vec3 col=vec3(.004,.008,.016)+vec3(.85,.95,1.)*star;
+ col+=vec3(.02,.06,.04)*fbm(uv*2.+T*.01);
+ /* planet: huge sphere rising from the lower right */
+ vec2 c=vec2(asp>1.?.45:.15,-1.25); float pr=asp>1.?1.55:1.3;
+ vec2 q=(uv-c)/pr; float d=length(q);
+ vec3 L=normalize(vec3(-.55,.75,.45));
+ if(d<1.){
+  float z=sqrt(1.-d*d); vec3 n=vec3(q,z);
+  vec2 s=q/(z+.35)*2.2; s.x+=T*.012;
+  vec2 w=vec2(fbm(s*1.4+vec2(0.,T*.02)),fbm(s*1.4+vec2(5.2,1.3)-T*.018));
+  vec2 w2=vec2(fbm(s*2.+3.8*w+vec2(1.7,9.2)+T*.03),fbm(s*2.+3.8*w+vec2(8.3,2.8)-T*.02));
+  float f=fbm(s*2.6+4.2*w2);
+  vec3 deep=vec3(.01,.07,.03),mid=vec3(.12,.55,.12),bright=vec3(.62,.95,.3),hot=vec3(.95,.42,.08),ember=vec3(.45,.1,.03);
+  vec3 a=mix(deep,mid,smoothstep(.25,.65,f));
+  a=mix(a,bright,smoothstep(.62,.9,f)*.75);
+  float o=smoothstep(.42,.72,w2.x)*smoothstep(.3,.7,fbm(s*.7+vec2(3.,7.)+T*.01));
+  a=mix(a,mix(ember,hot,f),o*.85);
+  a+=vec3(.7,1.,.4)*pow(smoothstep(.55,.95,f),6.)*.35;
+  float lit=clamp(dot(n,L),0.,1.);
+  a*=.08+1.15*lit;
+  a*=smoothstep(0.,.18,z);
+  col=a;
+ }
+ /* atmosphere glow on the rim */
+ float rim=exp(-abs(d-1.)*pr*16.);
+ float side=clamp(dot(normalize(vec3(q,.2)),L)*.8+.35,0.,1.);
+ col+=vec3(.3,.95,.45)*rim*.55*side;
+ col+=vec3(.15,.5,.25)*exp(-max(d-1.,0.)*pr*4.)*.12*side*step(1.,d);
+ col=pow(col,vec3(.95));
+ gl_FragColor=vec4(col,1.);
+}`;
+    const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; };
+    let prog;
+    try { prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(prog); if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw 0; } catch (e) { return false; }
+    gl.useProgram(prog);
+    const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const uR = gl.getUniformLocation(prog, "R"), uT = gl.getUniformLocation(prog, "T"), uM = gl.getUniformLocation(prog, "M");
+    const still = matchMedia("(prefers-reduced-motion:reduce)").matches;
+    let mx = 0, my = 0, tmx = 0, tmy = 0, last = 0;
+    addEventListener("pointermove", e => { tmx = e.clientX / innerWidth - .5; tmy = .5 - e.clientY / innerHeight; });
+    function size() { const sc = (isMobile() ? .5 : .6) * Math.min(devicePixelRatio || 1, 2); c.width = Math.round(innerWidth * sc); c.height = Math.round(innerHeight * sc); gl.viewport(0, 0, c.width, c.height); }
+    function draw(t) {
+      mx += (tmx - mx) * .05; my += (tmy - my) * .05;
+      gl.uniform2f(uR, c.width, c.height); gl.uniform1f(uT, 40 + t / 1000); gl.uniform2f(uM, mx, my);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    function loop(t) { if (document.hidden) return; if (t - last > 33) { last = t; draw(t); } requestAnimationFrame(loop); }
+    size(); c.style.imageRendering = "auto";
+    if (still) draw(0); else requestAnimationFrame(loop);
+    addEventListener("resize", () => { size(); draw(performance.now()); });
+    document.addEventListener("visibilitychange", () => { if (!document.hidden && !still) requestAnimationFrame(loop); });
+    return true;
+  }
+  if (!planetWallpaper()) (function wallpaper() {
     const c = $("#wall"), x = c.getContext("2d"); let w, h, pts, dpr;
     const still = matchMedia("(prefers-reduced-motion:reduce)").matches;
     function init() { dpr = Math.min(devicePixelRatio || 1, 2); w = innerWidth; h = innerHeight; c.width = w * dpr; c.height = h * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0); const n = Math.round(Math.min(110, w * h / 14000)); pts = Array.from({ length: n }, () => ({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25, r: Math.random() * 1.6 + .6 })); }
