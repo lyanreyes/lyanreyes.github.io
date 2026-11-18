@@ -12,7 +12,7 @@
 <link rel="icon" href="img/lyan.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="os.css?v=13">
+<link rel="stylesheet" href="os.css?v=15">
 </head>
 <body>
 <div id="boot"><div class="b"><div class="logo">L</div><p>Starting LyanOS…</p><div class="bar"><i></i></div></div></div>
@@ -95,21 +95,10 @@
     </g>
     <path id="tether" d="" stroke="#d6e4ff" stroke-width="1.6" fill="none" stroke-dasharray="4 3" opacity="0"/>
     <g id="rk">
-      <g transform="translate(110 91) scale(1.7) translate(-110 -91)"><g class="rk-hop"><g id="rk-flip">
-        <g filter="url(#rockTex)" fill="none" stroke="#7a6c5d" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
-          <path class="lg lg1" d="M101 76 L92 70 L86 90" style="transform-origin:101px 76px"/>
-          <path class="lg lg2" d="M104 79 L99 80 L96 91" style="transform-origin:104px 79px"/>
-          <path class="lg lg3" d="M116 79 L121 80 L124 91" style="transform-origin:116px 79px"/>
-          <path class="lg lg4" d="M119 76 L128 70 L134 90" style="transform-origin:119px 76px"/>
-        </g>
-        <g class="rk-body">
-          <path filter="url(#rockTex)" d="M110 62 C120 62 125 68 124 75 C123 82 117 85 110 85 C103 85 97 82 96 75 C95 68 100 62 110 62Z" fill="url(#stone)"/>
-          <path d="M106 63 l2 -7 l3 7Z M111 62 l3 -9 l3 9Z" fill="#9fe0ff"/>
-          <g class="rk-eyes"><ellipse cx="105" cy="72" rx="3.1" ry="3.7" fill="url(#eye)"/><ellipse cx="115" cy="72" rx="3.1" ry="3.7" fill="url(#eye)"/></g>
-          <path d="M107 79 q3 2 6 0" stroke="#3a312a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-        </g>
+      <g class="rk-hop"><g id="rk-flip"><g class="rk-wob">
+        <image href="img/rocky.png" x="66" y="3" width="88" height="89" preserveAspectRatio="xMidYMax meet"/>
       </g></g></g>
-      <circle cx="110" cy="68" r="32" fill="transparent" class="rk-hit"/>
+      <circle cx="110" cy="48" r="44" fill="transparent" class="rk-hit"/>
     </g>
   </svg>
 </button>
@@ -128,6 +117,6 @@
 </footer>
 
 <noscript><p style="position:fixed;inset:auto 0 70px;text-align:center;color:#fff">This portfolio needs JavaScript. <a href="classic.html">Open the simple version</a>.</p></noscript>
-<script src="os.js?v=13"></script>
+<script src="os.js?v=15"></script>
 </body>
 </html>

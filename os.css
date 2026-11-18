@@ -263,7 +263,7 @@ ul.b b{color:var(--ink);font-weight:600}
 #astro.spinning .rk-hop{animation:spin .7s ease-in-out}
 .rk-hop{transform-box:fill-box;transform-origin:center}
 @keyframes spin{to{transform:rotate(360deg)}}
-#rk-flip{transform-box:view-box;transform-origin:110px 80px;transition:transform .25s}
+#rk-flip{transform-box:view-box;transform-origin:110px 56px;transition:transform .25s}
 #astro.face-left #rk-flip{transform:scaleX(-1)}
 .lg{transform-box:view-box}
 #astro.walking .lg1,#astro.walking .lg3{animation:stepA .2s ease-in-out infinite alternate}
@@ -284,3 +284,14 @@ ul.b b{color:var(--ink);font-weight:600}
 @keyframes flick2{to{transform:scaleX(.78);opacity:.8}}
 
 .beacon2{animation:blink 1.6s steps(2) infinite .8s}
+
+/* fan-art Rocky: whole-body motions */
+.rk-wob{transform-box:view-box;transform-origin:110px 90px}
+#astro.walking .rk-wob{animation:scuttle .28s ease-in-out infinite alternate}
+#astro.waving .rk-wob{animation:shimmy .3s ease-in-out 8 alternate}
+#astro.looking .rk-wob{animation:peer 1.6s ease-in-out}
+.rk-wob{animation:breathe 3.2s ease-in-out infinite}
+@keyframes scuttle{from{transform:rotate(-5deg) translateY(0)}to{transform:rotate(5deg) translateY(-2.5px)}}
+@keyframes shimmy{from{transform:rotate(-10deg) scale(1.02)}to{transform:rotate(10deg) scale(1.02)}}
+@keyframes peer{0%,100%{transform:rotate(0)}30%,45%{transform:rotate(-8deg) translateX(-2px)}65%,80%{transform:rotate(8deg) translateX(2px)}}
+@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,.98)}}

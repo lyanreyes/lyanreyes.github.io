@@ -388,7 +388,7 @@
         }
       }
       rk.setAttribute("transform", `translate(${x.toFixed(2)} ${y.toFixed(2)})`);
-      const ax = 101, ay = 110, bx = 110 + x, by = 70 + y, d = Math.hypot(bx - ax, by - ay);
+      const ax = 101, ay = 110, bx = 110 + x, by = 50 + y, d = Math.hypot(bx - ax, by - ay);
       const sag = Math.max(0, 40 - d * .12);
       tether.setAttribute("d", `M${ax} ${ay} Q${(ax + bx) / 2} ${(ay + by) / 2 + sag} ${bx} ${by}`);
       tether.setAttribute("opacity", d > 18 ? "0.9" : "0");
