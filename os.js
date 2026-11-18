@@ -334,7 +334,68 @@
     $(".chat-chips", body).addEventListener("click", e => { const b = e.target.closest("button"); if (b) send(b.textContent); });
     if (!isMobile()) setTimeout(() => inp.focus(), 60);
   }
-  $("#astro").addEventListener("click", () => openApp("astro"));
+  /* Rocky controller: crawls on his ship, tethered, draggable, does tricks when tapped */
+  (function rockyController() {
+    const root = $("#astro"), svg = $(".astro-svg", root), rk = $("#rk"), tether = $("#tether");
+    let x = 0, y = 0, vx = 0, vy = 0, target = 0, held = false, moved = false, start = null, off = { x: 0, y: 0 };
+    let nextAt = performance.now() + 1500, busyUntil = 0;
+    const MIN = -70, MAX = 48, LEN = 340;           /* hull range and tether length (svg units) */
+    const toSvg = e => { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; return pt.matrixTransform(svg.getScreenCTM().inverse()); };
+    const setCls = (c, on) => root.classList.toggle(c, on);
+    function trick() {
+      const t = ["hopping", "waving", "spinning", "dance"][Math.floor(Math.random() * 4)], now = performance.now();
+      ["hopping", "waving", "spinning", "looking"].forEach(c => setCls(c, false)); void root.offsetWidth;
+      if (t === "dance") { setCls("walking", true); setCls("hopping", true); setTimeout(() => { setCls("walking", false); setCls("hopping", false); }, 900); busyUntil = now + 1000; }
+      else { setCls(t, true); const d = t === "waving" ? 2500 : 750; setTimeout(() => setCls(t, false), d); busyUntil = now + d; }
+      nextAt = busyUntil + 900;
+    }
+    rk.addEventListener("pointerdown", e => {
+      e.stopPropagation(); e.preventDefault();
+      const p = toSvg(e); start = { cx: e.clientX, cy: e.clientY }; off = { x: p.x - x, y: p.y - y }; moved = false;
+      rk.setPointerCapture(e.pointerId);
+    });
+    rk.addEventListener("pointermove", e => {
+      if (!start) return;
+      if (!moved && Math.hypot(e.clientX - start.cx, e.clientY - start.cy) > 6) { moved = true; held = true; setCls("held", true); setCls("walking", false); }
+      if (!held) return;
+      const p = toSvg(e); let nx = p.x - off.x, ny = p.y - off.y;
+      const d = Math.hypot(nx - 8, ny + 12); if (d > LEN) { nx = 8 + (nx - 8) * LEN / d; ny = -12 + (ny + 12) * LEN / d; }
+      vx = nx - x; vy = ny - y; x = nx; y = ny;
+    });
+    const release = () => { if (!start) return; if (!moved) trick(); start = null; held = false; setCls("held", false); target = Math.max(MIN, Math.min(MAX, x)); };
+    rk.addEventListener("pointerup", release); rk.addEventListener("pointercancel", release);
+    rk.addEventListener("click", e => e.stopPropagation());
+    root.addEventListener("click", e => { if (!e.target.closest("#rk")) openApp("astro"); });
+    root.addEventListener("keydown", e => { if (e.key === "t") trick(); });
+
+    function frame(now) {
+      if (!held) {
+        const onHull = Math.abs(y) < .4 && Math.abs(vy) < .4 && x >= MIN - .5 && x <= MAX + .5;
+        if (!onHull) { /* spring back along the tether */
+          const tx = Math.max(MIN, Math.min(MAX, x));
+          vx = (vx + (tx - x) * .06) * .86; vy = (vy + (0 - y) * .06) * .86; x += vx; y += vy;
+          if (Math.abs(y) < .4 && Math.abs(vy) < .4) { y = 0; vy = 0; }
+        } else if (now > busyUntil) {
+          y = 0;
+          if (Math.abs(target - x) > .6) { const dir = Math.sign(target - x); x += dir * .55; setCls("walking", true); setCls("face-left", dir < 0); }
+          else { setCls("walking", false); if (now > nextAt) {
+            const r = Math.random();
+            if (r < .55) target = MIN + Math.random() * (MAX - MIN);
+            else if (r < .7) { setCls("looking", true); setTimeout(() => setCls("looking", false), 1600); }
+            else if (r < .8) trick();
+            nextAt = now + 1500 + Math.random() * 2500;
+          } }
+        }
+      }
+      rk.setAttribute("transform", `translate(${x.toFixed(2)} ${y.toFixed(2)})`);
+      const ax = 101, ay = 110, bx = 110 + x, by = 70 + y, d = Math.hypot(bx - ax, by - ay);
+      const sag = Math.max(0, 40 - d * .12);
+      tether.setAttribute("d", `M${ax} ${ay} Q${(ax + bx) / 2} ${(ay + by) / 2 + sag} ${bx} ${by}`);
+      tether.setAttribute("opacity", d > 18 ? "0.9" : "0");
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
 
   /* ---------- desktop ---------- */
   const desk = $("#desktop");

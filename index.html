@@ -12,7 +12,7 @@
 <link rel="icon" href="img/lyan.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="os.css?v=7">
+<link rel="stylesheet" href="os.css?v=11">
 </head>
 <body>
 <div id="boot"><div class="b"><div class="logo">L</div><p>Starting LyanOS…</p><div class="bar"><i></i></div></div></div>
@@ -28,56 +28,89 @@
 <main id="desktop" aria-label="Desktop"></main>
 
 <button id="astro" aria-label="Talk to Rocky">
-  <span class="astro-bubble">Hi, I'm Rocky! Click to chat 👋</span>
-  <svg class="astro-svg" viewBox="0 0 140 170" aria-hidden="true">
+  <span class="astro-bubble">Drag or tap me! Tap the ship to chat 👋</span>
+  <svg class="astro-svg" viewBox="0 0 220 170" aria-hidden="true">
     <defs>
-      <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#7cc4ff" stop-opacity=".45"/><stop offset="1" stop-color="#7cc4ff" stop-opacity="0"/></radialGradient>
-      <radialGradient id="stone" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#c9bcaa"/><stop offset=".55" stop-color="#8d7f6e"/><stop offset="1" stop-color="#4a4038"/></radialGradient>
-      <linearGradient id="limb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a39482"/><stop offset="1" stop-color="#5b4f44"/></linearGradient>
+      <radialGradient id="glow" cx=".5" cy=".55" r=".5"><stop offset="0" stop-color="#7cc4ff" stop-opacity=".35"/><stop offset="1" stop-color="#7cc4ff" stop-opacity="0"/></radialGradient>
+      <linearGradient id="hull" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef4ff"/><stop offset=".55" stop-color="#9fb3d6"/><stop offset="1" stop-color="#4b5d84"/></linearGradient>
+      <linearGradient id="cock" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bff0ff"/><stop offset=".5" stop-color="#38a6ff"/><stop offset="1" stop-color="#0b2a6b"/></linearGradient>
+      <linearGradient id="thrust" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#e9fbff"/><stop offset=".35" stop-color="#38d6ff"/><stop offset="1" stop-color="#1f5eff" stop-opacity="0"/></linearGradient>
+      <radialGradient id="stone" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#cdbfae"/><stop offset=".55" stop-color="#8d7f6e"/><stop offset="1" stop-color="#4a4038"/></radialGradient>
       <radialGradient id="eye" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#e9fbff"/><stop offset=".45" stop-color="#38d6ff"/><stop offset="1" stop-color="#1f5eff"/></radialGradient>
-      <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9fbff"/><stop offset=".4" stop-color="#38d6ff"/><stop offset="1" stop-color="#1f5eff" stop-opacity="0"/></linearGradient>
-      <linearGradient id="gem" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bff0ff"/><stop offset="1" stop-color="#3a7bff"/></linearGradient>
-      <filter id="rockTex" x="-10%" y="-10%" width="120%" height="120%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="4" seed="7" result="n"/>
-        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.25  0 0 0 0 0.2  0 0 0 0 0.16  0 0 0 1.4 -0.55" result="spots"/>
+      <filter id="rockTex" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.18" numOctaves="3" seed="7" result="n"/>
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.25  0 0 0 0 0.2  0 0 0 0 0.16  0 0 0 1.5 -0.6" result="spots"/>
         <feComposite in="spots" in2="SourceAlpha" operator="in" result="spotsIn"/>
-        <feTurbulence type="turbulence" baseFrequency="0.035 0.06" numOctaves="2" seed="3" result="t"/>
-        <feDiffuseLighting in="t" surfaceScale="3.2" lighting-color="#fff" result="lit"><feDistantLight azimuth="225" elevation="48"/></feDiffuseLighting>
+        <feTurbulence type="turbulence" baseFrequency="0.07 0.12" numOctaves="2" seed="3" result="t"/>
+        <feDiffuseLighting in="t" surfaceScale="2.4" lighting-color="#fff" result="lit"><feDistantLight azimuth="225" elevation="50"/></feDiffuseLighting>
         <feComposite in="lit" in2="SourceAlpha" operator="in" result="litIn"/>
         <feBlend in="SourceGraphic" in2="litIn" mode="multiply" result="shaded"/>
         <feComposite in="spotsIn" in2="shaded" operator="over"/>
       </filter>
     </defs>
-    <circle cx="70" cy="82" r="70" fill="url(#glow)"/>
-    <!-- jet boosters -->
-    <g class="flames"><path d="M29 122 q4 18 0 28 q-4 -10 0 -28Z" fill="url(#flame)"/><path d="M55 131 q4 22 0 34 q-4 -12 0 -34Z" fill="url(#flame)"/><path d="M87 131 q4 22 0 34 q-4 -12 0 -34Z" fill="url(#flame)"/><path d="M111 122 q4 18 0 28 q-4 -10 0 -28Z" fill="url(#flame)"/></g>
-    <g filter="url(#rockTex)">
-    <!-- four stubby feet: two in back (darker), two in front -->
-    <path d="M30 104 l-8 12 q-2 5 3 6 h9 q5 0 5 -5 l1 -10Z" fill="#5b4f44"/>
-    <path d="M106 104 l8 12 q2 5 -3 6 h-9 q-5 0 -5 -5 l-1 -10Z" fill="#5b4f44"/>
-    <path d="M48 112 l-3 14 q0 5 6 5 h10 q5 0 4 -5 l-3 -14Z" fill="url(#limb)"/>
-    <path d="M78 112 l-2 14 q0 5 6 5 h10 q5 0 4 -5 l-4 -14Z" fill="url(#limb)"/>
-    <!-- left arm (resting) -->
-    <path d="M30 78 q-12 10 -10 26 q1 6 7 5 q5 -1 5 -7 l2 -14Z" fill="url(#limb)"/>
-    <!-- waving arm -->
-    <g class="arm-wave"><path d="M104 74 q14 -10 18 -28 q1 -6 -5 -7 q-5 0 -6 5 q-3 12 -12 18Z" fill="url(#limb)"/><circle cx="117" cy="38" r="7" fill="#7a6c5d"/></g>
-    <!-- boulder body -->
-    <path d="M70 34 C92 33 108 44 110 66 C112 88 104 108 86 116 C72 122 56 121 44 114 C30 106 25 88 28 70 C31 49 47 35 70 34Z" fill="url(#stone)"/>
-    <!-- cracks, speckles, moss -->
-    <path d="M52 50 l8 8 l-3 9 M92 60 l-7 6 l4 10 M60 98 l9 -4 l6 6" stroke="#4a4038" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/>
-    <g fill="#4a4038" opacity=".45"><circle cx="40" cy="80" r="2"/><circle cx="98" cy="92" r="2.4"/><circle cx="78" cy="106" r="1.6"/><circle cx="46" cy="62" r="1.4"/><circle cx="96" cy="50" r="1.5"/></g>
-    <path d="M36 92 q8 -6 16 0 q-8 4 -16 0Z" fill="#5fa86a" opacity=".55"/>
+    <ellipse cx="110" cy="100" rx="105" ry="62" fill="url(#glow)"/>
+    <g class="ship">
+      <defs>
+        <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8e98a8"/><stop offset=".18" stop-color="#e3e9f1"/><stop offset=".42" stop-color="#9aa5b6"/><stop offset=".75" stop-color="#4a5262"/><stop offset="1" stop-color="#20252f"/></linearGradient>
+        <linearGradient id="ring" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5c6577"/><stop offset=".2" stop-color="#b9c2cf"/><stop offset=".6" stop-color="#3a4150"/><stop offset="1" stop-color="#15191f"/></linearGradient>
+        <linearGradient id="nozzle" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b5a4a"/><stop offset=".3" stop-color="#c9a27a"/><stop offset=".7" stop-color="#5a4434"/><stop offset="1" stop-color="#241a12"/></linearGradient>
+        <linearGradient id="solar" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b4fa8"/><stop offset=".5" stop-color="#0f2560"/><stop offset="1" stop-color="#1d3d8f"/></linearGradient>
+        <linearGradient id="plume" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset=".25" stop-color="#9fe9ff"/><stop offset=".6" stop-color="#3a7bff" stop-opacity=".6"/><stop offset="1" stop-color="#1f5eff" stop-opacity="0"/></linearGradient>
+      </defs>
+      <!-- engine plume -->
+      <path class="thrust" d="M8 102 C-10 98 -38 104 -56 110 C-38 116 -10 122 8 118Z" fill="url(#plume)"/>
+      <!-- solar array (far side, up) -->
+      <path d="M66 92 l2 -6" stroke="#6b7486" stroke-width="2"/>
+      <path d="M58 42 h36 l-6 44 h-36Z" fill="url(#solar)" stroke="#9fb3d6" stroke-width=".8"/>
+      <path d="M55 64 h36" stroke="#7fb4ff" stroke-width=".5" opacity=".6"/><path d="M68 42 l-4 44" stroke="#7fb4ff" stroke-width=".5" opacity=".6"/><path d="M74 42 l-4 44" stroke="#7fb4ff" stroke-width=".5" opacity=".6"/><path d="M80 42 l-4 44" stroke="#7fb4ff" stroke-width=".5" opacity=".6"/><path d="M86 42 l-4 44" stroke="#7fb4ff" stroke-width=".5" opacity=".6"/><path d="M92 42 l-4 44" stroke="#7fb4ff" stroke-width=".5" opacity=".6"/>
+      <!-- radiator (far side, down) -->
+      <path d="M56 130 h30 l-6 32 h-30Z" fill="url(#solar)" stroke="#9fb3d6" stroke-width=".8"/><path d="M64 132 l-6 30" stroke="#7fb4ff" stroke-width=".5" opacity=".6"/><path d="M70 132 l-6 30" stroke="#7fb4ff" stroke-width=".5" opacity=".6"/><path d="M76 132 l-6 30" stroke="#7fb4ff" stroke-width=".5" opacity=".6"/><path d="M82 132 l-6 30" stroke="#7fb4ff" stroke-width=".5" opacity=".6"/><path d="M88 132 l-6 30" stroke="#7fb4ff" stroke-width=".5" opacity=".6"/>
+      <!-- engine bell -->
+      <path d="M24 98 L8 92 L8 128 L24 122Z" fill="url(#nozzle)"/>
+      <path d="M8 92 L8 128" stroke="#ffb066" stroke-width="1.2" opacity=".7"/>
+      <!-- main hull -->
+      <rect x="24" y="91" width="150" height="39" rx="4" fill="url(#metal)"/>
+      <path d="M36 93v36" stroke="#1b2029" stroke-width=".6" opacity=".7"/><path d="M44 93v36" stroke="#1b2029" stroke-width=".6" opacity=".7"/><path d="M70 93v36" stroke="#1b2029" stroke-width=".6" opacity=".7"/><path d="M78 93v36" stroke="#1b2029" stroke-width=".6" opacity=".7"/><path d="M106 93v36" stroke="#1b2029" stroke-width=".6" opacity=".7"/><path d="M114 93v36" stroke="#1b2029" stroke-width=".6" opacity=".7"/><path d="M140 93v36" stroke="#1b2029" stroke-width=".6" opacity=".7"/><path d="M148 93v36" stroke="#1b2029" stroke-width=".6" opacity=".7"/><path d="M170 93v36" stroke="#1b2029" stroke-width=".6" opacity=".7"/>
+      <rect x="52" y="91" width="5" height="39" fill="url(#ring)"/><circle cx="54.5" cy="95" r=".7" fill="#c9d1dc"/><circle cx="54.5" cy="104" r=".7" fill="#c9d1dc"/><circle cx="54.5" cy="113" r=".7" fill="#c9d1dc"/><circle cx="54.5" cy="122" r=".7" fill="#c9d1dc"/><rect x="88" y="91" width="5" height="39" fill="url(#ring)"/><circle cx="90.5" cy="95" r=".7" fill="#c9d1dc"/><circle cx="90.5" cy="104" r=".7" fill="#c9d1dc"/><circle cx="90.5" cy="113" r=".7" fill="#c9d1dc"/><circle cx="90.5" cy="122" r=".7" fill="#c9d1dc"/><rect x="124" y="91" width="5" height="39" fill="url(#ring)"/><circle cx="126.5" cy="95" r=".7" fill="#c9d1dc"/><circle cx="126.5" cy="104" r=".7" fill="#c9d1dc"/><circle cx="126.5" cy="113" r=".7" fill="#c9d1dc"/><circle cx="126.5" cy="122" r=".7" fill="#c9d1dc"/><rect x="156" y="91" width="5" height="39" fill="url(#ring)"/><circle cx="158.5" cy="95" r=".7" fill="#c9d1dc"/><circle cx="158.5" cy="104" r=".7" fill="#c9d1dc"/><circle cx="158.5" cy="113" r=".7" fill="#c9d1dc"/><circle cx="158.5" cy="122" r=".7" fill="#c9d1dc"/>
+      <!-- forward module + nose -->
+      <path d="M172 91 h10 c14 0 24 9 24 19.5 c0 10.5 -10 19.5 -24 19.5 h-10Z" fill="url(#metal)"/>
+      <path d="M182 91 c14 0 24 9 24 19.5" stroke="#f2f6fb" stroke-width="1" fill="none" opacity=".7"/>
+      <g fill="#7fd8ff"><rect x="178" y="99" width="5" height="4" rx="1"/><rect x="186" y="99" width="5" height="4" rx="1"/><rect x="194" y="100.5" width="4" height="3.5" rx="1"/></g>
+      <g fill="#ffffff" opacity=".55"><rect x="178.5" y="99.4" width="2" height="1.2"/><rect x="186.5" y="99.4" width="2" height="1.2"/></g>
+      <!-- greebles: hatch, boxes, pipes, warning stripes -->
+      <rect x="94" y="110" width="14" height="13" rx="2" fill="#2a303b" stroke="#8e98a8" stroke-width=".7"/>
+      <circle cx="101" cy="116.5" r="2.2" fill="#3c4453" stroke="#aeb7c5" stroke-width=".6"/>
+      <rect x="130" y="113" width="18" height="6" rx="1" fill="#39404d"/>
+      <path d="M30 124 h120" stroke="#1b2029" stroke-width="1.6"/><path d="M30 124 h120" stroke="#6b7486" stroke-width=".6"/>
+      <g opacity=".85"><path d="M60 126 l3 -3 h4 l-3 3Z M66 126 l3 -3 h4 l-3 3Z M72 126 l3 -3 h4 l-3 3Z" fill="#f2c94c"/></g>
+      <text x="112" y="108" font-family="JetBrains Mono, monospace" font-size="5.5" font-weight="700" fill="#2a303b" opacity=".75">LR-01</text>
+      <!-- dish antenna on the nose -->
+      <path d="M186 91 l3 -12" stroke="#8e98a8" stroke-width="1.6"/>
+      <path d="M181 79 q8 -8 16 0 q-8 3 -16 0Z" fill="#dfe6ef" stroke="#7d879a" stroke-width=".6"/>
+      <circle cx="189" cy="76" r="1.2" fill="#ff5d73" class="beacon"/>
+      <!-- RCS thruster quads -->
+      <rect x="166" y="88" width="5" height="3" fill="#4a5262"/><rect x="166" y="130" width="5" height="3" fill="#4a5262"/>
+      <!-- nav lights -->
+      <circle cx="30" cy="94" r="1.6" fill="#ff5d73" class="beacon"/><circle cx="30" cy="127" r="1.6" fill="#7ef0b0" class="beacon2"/>
     </g>
-    <!-- crystal crown -->
-    <path d="M60 37 l4 -14 l5 13Z" fill="url(#gem)"/><path d="M69 35 l6 -18 l5 18Z" fill="url(#gem)"/><path d="M80 37 l5 -11 l3 12Z" fill="url(#gem)"/>
-    <!-- face -->
-    <ellipse cx="58" cy="70" rx="8" ry="9.5" fill="url(#eye)" class="eyes"/><ellipse cx="84" cy="70" rx="8" ry="9.5" fill="url(#eye)" class="eyes"/>
-    <circle cx="55.5" cy="66.5" r="2.4" fill="#fff"/><circle cx="81.5" cy="66.5" r="2.4" fill="#fff"/>
-    <path d="M62 86 q9 7 18 0" stroke="#3a312a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-    <ellipse cx="50" cy="82" rx="5" ry="3" fill="#ff8f8f" opacity=".35"/><ellipse cx="92" cy="82" rx="5" ry="3" fill="#ff8f8f" opacity=".35"/>
-    <!-- space bubble helmet -->
-    <circle cx="70" cy="72" r="54" fill="rgba(160,210,255,.07)" stroke="rgba(200,230,255,.55)" stroke-width="2"/>
-    <path d="M36 50 q10 -22 34 -26" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55"/>
+    <path id="tether" d="" stroke="#d6e4ff" stroke-width="1.6" fill="none" stroke-dasharray="4 3" opacity="0"/>
+    <g id="rk">
+      <g transform="translate(110 91) scale(1.7) translate(-110 -91)"><g class="rk-hop"><g id="rk-flip">
+        <g filter="url(#rockTex)" fill="none" stroke="#7a6c5d" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+          <path class="lg lg1" d="M101 76 L92 70 L86 90" style="transform-origin:101px 76px"/>
+          <path class="lg lg2" d="M104 79 L99 80 L96 91" style="transform-origin:104px 79px"/>
+          <path class="lg lg3" d="M116 79 L121 80 L124 91" style="transform-origin:116px 79px"/>
+          <path class="lg lg4" d="M119 76 L128 70 L134 90" style="transform-origin:119px 76px"/>
+        </g>
+        <g class="rk-body">
+          <path filter="url(#rockTex)" d="M110 62 C120 62 125 68 124 75 C123 82 117 85 110 85 C103 85 97 82 96 75 C95 68 100 62 110 62Z" fill="url(#stone)"/>
+          <path d="M106 63 l2 -7 l3 7Z M111 62 l3 -9 l3 9Z" fill="#9fe0ff"/>
+          <g class="rk-eyes"><ellipse cx="105" cy="72" rx="3.1" ry="3.7" fill="url(#eye)"/><ellipse cx="115" cy="72" rx="3.1" ry="3.7" fill="url(#eye)"/></g>
+          <path d="M107 79 q3 2 6 0" stroke="#3a312a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        </g>
+      </g></g></g>
+      <circle cx="110" cy="68" r="32" fill="transparent" class="rk-hit"/>
+    </g>
   </svg>
 </button>
 <div id="windows"></div>
@@ -95,6 +128,6 @@
 </footer>
 
 <noscript><p style="position:fixed;inset:auto 0 70px;text-align:center;color:#fff">This portfolio needs JavaScript. <a href="classic.html">Open the simple version</a>.</p></noscript>
-<script src="os.js?v=7"></script>
+<script src="os.js?v=11"></script>
 </body>
 </html>
