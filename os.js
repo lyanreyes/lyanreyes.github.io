@@ -312,11 +312,11 @@
     const robo = html => `<span class="robo">${pick(pre)}</span> ${html} <span class="robo">${pick(post)}</span>`;
     function speak(html) {
       if (!voiceOn || !window.speechSynthesis) return;
-      const d = el("div"); d.innerHTML = html;
+      const d = el("div"); d.innerHTML = html; d.querySelectorAll(".robo").forEach(n => n.remove());
       const text = d.textContent.replace(/[\u{1F300}-\u{1FAFF}☀-➿️]/gu, "").replace(/\*/g, "").replace(/\bLyan\b/g, "Lee-yan");
       speechSynthesis.cancel();
       /* human-sounding voice, pitched a little low and steady so it still feels like a friendly robot */
-      const u = new SpeechSynthesisUtterance(text); u.pitch = 0.7; u.rate = 0.96; u.volume = 0.95;
+      const u = new SpeechSynthesisUtterance(text); u.pitch = 1.25; u.rate = 0.9; u.volume = 1;
       const vs = speechSynthesis.getVoices(), en = vs.filter(x => /^en/i.test(x.lang));
       const pref = [/natural/i, /google us english/i, /guy|andrew|brian|christopher|eric/i, /aria|jenny|samantha|google uk english/i, /david|daniel|alex/i];
       let v = null; for (const re of pref) { v = en.find(x => re.test(x.name)); if (v) break; }
