@@ -263,6 +263,7 @@
     '<form class="chat-in"><input placeholder="Type a message…" aria-label="Message Rocky" autocomplete="off"><button type="submit">Send</button></form></div>',
     mount: mountRocky };
   labels.astro = "Ask Rocky";
+  if (window.speechSynthesis) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); }
   function mountRocky(body) {
     const log = $(".chat-log", body), form = $("form", body), inp = $("input", body);
     const add = (html, who) => { const m = el("div", "msg " + who, html); log.appendChild(m); log.scrollTop = log.scrollHeight; return m; };
@@ -312,11 +313,14 @@
     function speak(html) {
       if (!voiceOn || !window.speechSynthesis) return;
       const d = el("div"); d.innerHTML = html;
-      const text = d.textContent.replace(/[\u{1F300}-\u{1FAFF}☀-➿️]/gu, "").replace(/\*/g, "").replace(/\bLyan\b/g, "Lian");
+      const text = d.textContent.replace(/[\u{1F300}-\u{1FAFF}☀-➿️]/gu, "").replace(/\*/g, "").replace(/\bLyan\b/g, "Lee-yan");
       speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text); u.pitch = 0.05; u.rate = 0.92; u.volume = 0.9;
-      const vs = speechSynthesis.getVoices();
-      const v = vs.find(x => /^en/i.test(x.lang) && /david|daniel|alex|fred|male/i.test(x.name)) || vs.find(x => /^en/i.test(x.lang));
+      /* human-sounding voice, pitched a little low and steady so it still feels like a friendly robot */
+      const u = new SpeechSynthesisUtterance(text); u.pitch = 0.7; u.rate = 0.96; u.volume = 0.95;
+      const vs = speechSynthesis.getVoices(), en = vs.filter(x => /^en/i.test(x.lang));
+      const pref = [/natural/i, /google us english/i, /guy|andrew|brian|christopher|eric/i, /aria|jenny|samantha|google uk english/i, /david|daniel|alex/i];
+      let v = null; for (const re of pref) { v = en.find(x => re.test(x.name)); if (v) break; }
+      v = v || en[0];
       if (v) u.voice = v;
       speechSynthesis.speak(u);
     }
