@@ -422,7 +422,6 @@
   sm.addEventListener("click", e => { const b = e.target.closest("[data-sm]"); if (b) { toggleStart(false); openApp(b.dataset.sm); } });
   document.addEventListener("pointerdown", e => { if (!sm.contains(e.target) && e.target !== sb && !sb.contains(e.target)) toggleStart(false); });
   document.addEventListener("keydown", e => { if (e.key === "Escape") toggleStart(false); if (e.key === "Meta") toggleStart(); });
-  $("#simplebtn").onclick = () => location.href = "classic.html";
 
   /* ---------- clock ---------- */
   function tick() {

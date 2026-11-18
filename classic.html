@@ -51,6 +51,13 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .btn.primary:hover{border-color:var(--accent-2)}
 .btn.sm{padding:7px 12px;font-size:13.5px;border-radius:8px}
 .links .btn{color:var(--accent-ink)}
+.viewswitch{display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--chip);border:1px solid var(--line);flex:none;margin-left:auto}
+.viewswitch .vs{display:flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;font-size:13px;color:var(--muted);text-decoration:none}
+.viewswitch .vs b{font-weight:600}
+.viewswitch .vs svg{width:15px;height:15px}
+.viewswitch .vs.on{background:var(--accent);color:var(--accent-ink)}
+.viewswitch a.vs:hover{color:var(--ink);background:var(--surface)}
+@media (max-width:640px){.viewswitch .vs b{font-size:12px}.viewswitch .vs{padding:0 9px}}
 @media (max-width:640px){.links a:not(.btn){display:none}}
 
 /* hero */
@@ -121,6 +128,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
 <nav><div class="wrap">
   <a class="brand" href="#top"><b>&lt;</b>lyan.reyes<b>/&gt;</b></a>
+  <div class="viewswitch" role="group" aria-label="Choose view">
+    <a class="vs" href="index.html" title="Switch to the interactive desktop view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><b>Desktop</b></a>
+    <span class="vs on" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><b>Simple</b></span>
+  </div>
   <div class="links">
     <a href="#projects">Projects</a>
     <a href="#skills">Skills</a>
